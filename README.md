@@ -8,4 +8,3 @@
 - Luego ejecutaremos el cliente en su terminal, para ello hay que dirijirse a la carpeta remates-frontend, ejecutar el comando "node install" (solo la primera vez) y usar el comando "npm start" (en caso de error tambien sera por no tener bien instalado node para aquel comando, su intalacion directa es con el comando "npm install -g npm" en la terminal)
 - Una vez ejecutado el cliente se abrirá automaticamente una pagina en el navegador
 - Enjoy
-- Prueba
