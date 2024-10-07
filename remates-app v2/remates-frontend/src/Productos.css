@@ -1,0 +1,80 @@
+/* Contenedor principal */
+.productos-container {
+  padding: 20px;
+}
+
+/* Título */
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Grid de productos */
+.productos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Mantiene el tamaño fijo de las columnas */
+  gap: 40px; /* Espacio entre productos */
+  justify-items: center; /* Centra las tarjetas cuando hay menos productos */
+}
+
+/* Estilo de cada producto (card) */
+.producto-card {
+  width: 250px; /* Tamaño fijo para todas las tarjetas */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  text-align: center;
+  transition: transform 0.2s ease-in-out;
+}
+
+.producto-card:hover {
+  transform: scale(1.05);
+}
+
+/* Imagen del producto */
+.producto-imagen {
+  width: 100%; /* Asegura que el contenedor de la imagen siempre tenga el mismo ancho que la tarjeta */
+  height: 200px; /* Altura fija para el contenedor de la imagen */
+  overflow: hidden; /* Oculta cualquier parte de la imagen que exceda el tamaño del contenedor */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.producto-imagen img {
+  max-width: 100%; /* Máximo ancho de la imagen será el 100% de su contenedor */
+  max-height: 100%; /* Máximo altura de la imagen será el 100% de su contenedor */
+  object-fit: contain; /* Esto asegura que la imagen se ajuste dentro del contenedor sin ser recortada */
+}
+
+/* Si no hay imagen, mostrar un contenedor vacío */
+.placeholder-imagen {
+  width: 100%;
+  height: 200px;
+  background-color: #eaeaea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+/* Texto del producto */
+.producto-card h2 {
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.producto-card p {
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+/* Precio */
+.producto-card p:last-of-type {
+  font-weight: bold;
+  color: #333;
+}
