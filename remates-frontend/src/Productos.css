@@ -76,4 +76,12 @@
     font-weight: bold;
     color: #333;
   }
-  
+
+  @media (min-width: 992px) {
+    .margen-container{
+      width: 91% !important; 
+      width: fit-content; 
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
