@@ -24,6 +24,10 @@ npm install
 
 Esto debe hacerse de manera individual tanto para el backend como el frontend, carpetas `remates-backend` y `remates-frontend`, respectivamente.
 
+## Configuración
+
+Es necesario que se cree un archivo `.env` en el backend con la variable `JWT_SECRET` (con cualquier valor) para firmar el token de sesión de usuario.
+
 ## Ejecución local
 
 Ejecute el servidor del backend.

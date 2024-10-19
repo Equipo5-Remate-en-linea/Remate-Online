@@ -1,9 +1,0 @@
-.color-boton {
-  background-color:rgba(107,179,35,255) !important ;
-  border-color: rgba(107,179,35,255) !important ;
-}
-
-.color-boton:focus {
-  background-color:rgb(76, 128, 25) !important ;
-  border-color: rgb(76, 128, 25)  !important ;
-}

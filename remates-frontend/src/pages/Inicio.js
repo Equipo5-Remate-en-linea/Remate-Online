@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import './Productos.css'; // Importar el archivo de estilos CSS
+import '../assets/Productos.css'; // Importar el archivo de estilos CSS
 
 
 function Productos() {

@@ -2,7 +2,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { useState } from 'react';
-import './inicio_sesion.css'
+import '../assets/inicio_sesion.css';
 
 function InicioSesion({ estado, setEstado, setInicioExitoso}) {
   const Cerrar = () => setEstado(false);

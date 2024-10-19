@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table } from 'react-bootstrap';
-import './cuenta_administrador.css'
+import '../assets/cuenta_administrador.css';
 
 
 

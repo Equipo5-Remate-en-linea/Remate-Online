@@ -1,11 +1,11 @@
 // import { useEffect, useState } from 'react';
-import './navbar.css'; 
+import '../assets/navbar.css'; 
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { useState } from 'react';
-import InicioSesion from './sesion/inicio_sesion';
-import Registrarse from './sesion/registro'
+import InicioSesion from './inicio_sesion';
+import Registrarse from './registro'
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -81,7 +81,6 @@ function NavbarCustom() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link className= "color-letra" href="/">Inicio</Nav.Link>
-            <Nav.Link className= "color-letra" href="#link">Link</Nav.Link>
           </Nav>
           <div className="justify-content-end ">
           {!InicioExitoso &&
