@@ -3,7 +3,7 @@
   border-color: rgba(107,179,35,255) !important ;
 }
 
-.color-boton:focus {
+.color-boton:hover {
   background-color:rgb(76, 128, 25) !important ;
   border-color: rgb(76, 128, 25)  !important ;
 }
