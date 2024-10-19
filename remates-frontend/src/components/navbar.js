@@ -91,23 +91,7 @@ function NavbarCustom() {
             </Nav.Link>
           </Nav>
           <div className="justify-content-end ">
-            {!InicioExitoso && (
-              <Nav className="me-auto">
-                <Nav.Link
-                  className="color-letra linea-bajo-texto"
-                  onClick={AbrirInicio}
-                >
-                  Inicio sesion
-                </Nav.Link>
-                <Nav.Link
-                  className="color-letra linea-bajo-texto"
-                  onClick={AbrirRegistro}
-                >
-                  Registrarse
-                </Nav.Link>
-              </Nav>
-            )}
-            {InicioExitoso && (
+            {InicioExitoso ? (
               <Nav className="me-auto">
                 {usuarioAdministrador && (
                   <Nav.Link
@@ -122,6 +106,21 @@ function NavbarCustom() {
                   onClick={BorrarCookie}
                 >
                   Cerrar sesion
+                </Nav.Link>
+              </Nav>
+            ) : (
+              <Nav className="me-auto">
+                <Nav.Link
+                  className="color-letra linea-bajo-texto"
+                  onClick={AbrirInicio}
+                >
+                  Inicio sesion
+                </Nav.Link>
+                <Nav.Link
+                  className="color-letra linea-bajo-texto"
+                  onClick={AbrirRegistro}
+                >
+                  Registrarse
                 </Nav.Link>
               </Nav>
             )}
