@@ -1,14 +1,43 @@
 # Remate-Online
-prueba
-=======
-## Ejecucion codigo base
-- Para probar el codigo base hay que simplemente descargarlo y dejarlo en una carpeta separado
-- Una vez descargado y teniendo todos los archivos en la carpeta, hay que abrir nuestro editor de texto favorito (hecho en Visual Studio)
-- Dentro de su editor de texto, necesitaremos dos terminales, una terminal apuntando a su carpeta con todos los archivos descargados "remates-backend" y otra terminal abiendo la carpeta "remates-frontend"
-- Una vez con las dos terminales, una va a acutar como el servidor y otro como el cliente, para este caso el servidor sera la terminal apuntando a todas las carpetas y archivos (la primera terminal)
-- La segunda terminal actuara como el cliente que es la que apunta a la carpeta "remates-frontend"
-- Para ejecutar el servidor dirijase a la carpeta remates-backend, ejecutar el comando "node install" (solo la primera vez) y ejecute el comando "node server.js" (en caso de error sera por no tener instalado node, hay que instalarlo y agregarlo al path para detectar aquel comando)
-- Luego ejecutaremos el cliente en su terminal, para ello hay que dirijirse a la carpeta remates-frontend, ejecutar el comando "npm install" (solo la primera vez) y usar el comando "npm start" (en caso de error tambien sera por no tener bien instalado node para aquel comando, su intalacion directa es con el comando "npm install -g npm" en la terminal)
-- Una vez ejecutado el cliente se abrirá automaticamente una pagina en el navegador
-- Dato extra, si siguen con errores y conflictos debe de ser por el npm que esta mal instalado o simplemente no se ha instalado en cada carpeta de frontend y backend, asegurarse se haberlo hecho
-- Enjoy
+
+Aplicación web de remates en línea.
+
+---
+
+## Pre-requisitos
+
+Para instalar y ejecutar la aplicación se deben tener instalado [npm](https://www.npmjs.com/) y [node](https://nodejs.org/en/).
+
+## Instalación
+
+Clone el repositorio.
+
+```shell
+git clone https://github.com/Equipo5-Remate-en-linea/Remate-Online.git
+```
+
+Instale las dependencias
+
+```shell
+npm install
+```
+
+Esto debe hacerse de manera individual tanto para el backend como el frontend, carpetas `remates-backend` y `remates-frontend`, respectivamente.
+
+## Ejecución local
+
+Ejecute el servidor del backend.
+
+```shell
+# ubicado en la carpeta remates-backend, ejecute
+node server.js
+```
+
+Ejecute el servidor del frontend.
+
+```shell
+# ubicado en la carpeta remates-frontend, ejecute
+npm run start
+```
+
+La aplicación se abrirá en su navegador.
