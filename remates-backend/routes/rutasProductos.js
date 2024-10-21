@@ -19,6 +19,7 @@ const crearProducto = async (req, res) => {
       imagen: req.file.filename,
       duracion,
       categoria,
+      disponibilidad: "No disponible",
     });
     await nuevoProducto.save();
     res.status(201).send(nuevoProducto);
