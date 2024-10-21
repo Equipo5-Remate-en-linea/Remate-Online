@@ -1,0 +1,5 @@
+.table-container {
+  max-width: 92%;
+  margin: 0 auto; /* Para centrar horizontalmente */
+  padding: 20px;  /* Añadir espacio interno */
+}
