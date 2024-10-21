@@ -4,20 +4,30 @@ const router = express.Router();
 
 const Producto = require("../models/Producto");
 
+const upload = require("../middleware/createProductMiddleware");
+
 // Crear producto
 const crearProducto = async (req, res) => {
-  const { nombre, precioInicial, descripcion, imagen, duracion, categoria } =
-    req.body;
-  const nuevoProducto = new Producto({
-    nombre,
-    precioInicial,
-    descripcion,
-    imagen,
-    duracion,
-    categoria,
-  });
-  await nuevoProducto.save();
-  res.status(201).send(nuevoProducto);
+  if (!req.file)
+    return res.status(400).send({ message: "No hay una imagen subida" });
+  const { nombre, precioInicial, descripcion, duracion, categoria } = req.body;
+  try {
+    const nuevoProducto = new Producto({
+      nombre,
+      precioInicial,
+      descripcion,
+      imagen: req.file.filename,
+      duracion,
+      categoria,
+    });
+    await nuevoProducto.save();
+    res.status(201).send(nuevoProducto);
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .send({ message: "Ha ocurrido un error al crear el producto" });
+  }
 };
 
 // Obtener productos y filtrar por categoría
@@ -66,7 +76,10 @@ const eliminarProducto = async (req, res) => {
   res.status(204).send();
 };
 
-router.route("/").post(crearProducto).get(obtenerProductos);
+router
+  .route("/")
+  .post(upload.single("imagen"), crearProducto)
+  .get(obtenerProductos);
 router.route("/:id").get(obtenerProducto).delete(eliminarProducto);
 
 module.exports = router;

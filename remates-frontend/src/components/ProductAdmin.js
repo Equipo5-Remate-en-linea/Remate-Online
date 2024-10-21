@@ -1,9 +1,11 @@
+import endpoints from "../api/endpoints";
+
 export default function ProductAdmin({ product }) {
   return (
     <tr className="border-b hover:bg-neutral-50">
       <td className="flex flex-row items-center gap-4 px-4 py-2">
         <img
-          src={product.imagen}
+          src={`${endpoints.images}/${product.imagen}`}
           alt={`Imagen de ${product.nombre}`}
           className="w-24"
         />

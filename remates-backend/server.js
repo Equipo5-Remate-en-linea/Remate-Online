@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const path = require("path");
+
 const rutasProductos = require("./routes/rutasProductos");
 const rutasUsuarios = require("./routes/rutasUsuarios");
 const rutasAutenticacion = require("./routes/rutasAutenticacion");
@@ -54,6 +56,7 @@ app.use("/productos", rutasProductos);
 app.use("/usuarios", rutasUsuarios);
 app.use("/auth", rutasAutenticacion);
 app.use("/categorias", rutasCategorias);
+app.use("/images", express.static("images"));
 
 // Puerto
 const PORT = process.env.PORT || 5000;
