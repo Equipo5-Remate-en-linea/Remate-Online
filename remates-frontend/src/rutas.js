@@ -1,11 +1,12 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Inicio from "./pages/Inicio";
-import AdministracionCuenas from "./pages/AdministracionCuentas";
 // import Home from './Home';
 import NavbarCustom from "./components/navbar";
 import ProductoDetalle from "./pages/ProductoDetalle";
 import AdministracionProductos from "./pages/AdministracionProductos";
+import AdministracionCuentas from "./pages/AdministracionCuentas";
+import AdministracionProductosDetalle from "./pages/AdministracionProductosDetalle";
 import AgregarProducto from "./pages/AgregarProducto";
 
 function Rutas() {
@@ -25,8 +26,12 @@ function Rutas() {
           element={<AgregarProducto />}
         />
         <Route
+          path="/administracion/productos/:id"
+          element={<AdministracionProductosDetalle />}
+        />
+        <Route
           path="/administracion/cuentas"
-          element={<AdministracionCuenas />}
+          element={<AdministracionCuentas />}
         />
       </Routes>
     </Router>
