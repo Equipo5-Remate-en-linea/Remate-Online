@@ -69,7 +69,13 @@ export default function FormAgregarProducto() {
         <label className="font-semibold" htmlFor="image">
           Imagen
         </label>
-        <input type="file" id="image" name="image" className={INPUTS_CLASSES} />
+        <input
+          type="file"
+          id="image"
+          name="image"
+          className={INPUTS_CLASSES}
+          onChange={(e) => console.log(e.target.files[0])}
+        />
       </div>
       {/* valor inicial */}
       <div className={FIELDS_CLASSES}>
