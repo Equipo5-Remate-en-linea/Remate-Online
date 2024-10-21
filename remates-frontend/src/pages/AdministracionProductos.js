@@ -6,6 +6,8 @@ import ProductAdmin from "../components/ProductAdmin";
 
 export default function AdministracionProductos() {
   const [products, setProducts] = useState([]);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
 
   const navigate = useNavigate();
 
@@ -29,6 +31,16 @@ export default function AdministracionProductos() {
     <main className="mx-auto my-8">
       <h1 className="text-3xl font-bold">Productos</h1>
       <div className="mx-auto lg:w-2/5 flex flex-col gap-3 items-start">
+        {success && (
+          <p className="w-full p-2 bg-green-600 text-white font-bold text-center">
+            Producto eliminado correctamente
+          </p>
+        )}
+        {error && (
+          <p className="w-full p-2 bg-red-600 text-white font-bold text-center">
+            Error al eliminar el producto
+          </p>
+        )}
         <button
           className="color-boton text-white px-4 py-2 rounded-sm transition"
           onClick={() => handleClick()}
@@ -45,7 +57,14 @@ export default function AdministracionProductos() {
           <tbody>
             {products.length > 0 ? (
               products.map((product) => (
-                <ProductAdmin key={product._id} product={product} />
+                <ProductAdmin
+                  key={product._id}
+                  products={products}
+                  product={product}
+                  setSuccess={setSuccess}
+                  setError={setError}
+                  setProducts={setProducts}
+                />
               ))
             ) : (
               <tr>

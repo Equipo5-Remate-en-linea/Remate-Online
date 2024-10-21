@@ -73,8 +73,15 @@ const obtenerProducto = async (req, res) => {
 
 // Eliminar producto
 const eliminarProducto = async (req, res) => {
-  await Producto.findByIdAndDelete(req.params.id);
-  res.status(204).send();
+  try {
+    await Producto.findByIdAndDelete(req.params.id);
+    res.status(204).send();
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .send({ message: "Ha ocurrido un error al eliminar el producto" });
+  }
 };
 
 router

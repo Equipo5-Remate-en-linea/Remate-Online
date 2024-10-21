@@ -1,13 +1,40 @@
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import endpoints from "../api/endpoints";
 
-export default function ProductAdmin({ product }) {
+export default function ProductAdmin({
+  products,
+  product,
+  setSuccess,
+  setError,
+  setProducts,
+}) {
   // manejar eliminar
+  const updateProducts = () => {
+    const objectIndex = products.indexOf(product);
+    const updatedProducts = products.filter((p) => p._id !== product._id);
+    setProducts(updatedProducts);
+  };
+
   const handleClickDelete = async () => {
     const confirmation = window.confirm(
       "Una vez elimine el producto no podrá recuperarle, ¿Aún así desea eliminarlo?"
     );
     if (!confirmation) return;
+    try {
+      await axios.delete(`${endpoints.productos}/${product._id}`);
+      setSuccess(true);
+      updateProducts();
+      setTimeout(() => {
+        setSuccess(false);
+      }, 3000);
+    } catch (error) {
+      console.error(error);
+      setError(true);
+      setTimeout(() => {
+        setError(false);
+      }, 3000);
+    }
   };
   // manejar ver detalles
   const navigate = useNavigate();
