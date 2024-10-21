@@ -22,7 +22,7 @@ function NavbarCustom() {
   const navigate = useNavigate();
 
   const PaginaAdministracion = () => {
-    navigate("/cuentas_administrador");
+    navigate("/administracion");
   };
 
   useEffect(() => {
