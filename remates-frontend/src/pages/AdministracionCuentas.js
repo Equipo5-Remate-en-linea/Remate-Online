@@ -3,7 +3,7 @@ import { Table } from "react-bootstrap";
 import "../assets/cuenta_administrador.css";
 import endpoints from "../api/endpoints";
 
-function Cuentas_administrador() {
+function AdministracionCuentas() {
   const [usuarios, setUsuarios] = useState([]);
 
   const fetchUsuarios = async () => {
@@ -97,4 +97,4 @@ function Cuentas_administrador() {
   );
 }
 
-export default Cuentas_administrador;
+export default AdministracionCuentas;

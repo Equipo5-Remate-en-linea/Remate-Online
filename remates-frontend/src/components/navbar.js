@@ -21,8 +21,12 @@ function NavbarCustom() {
 
   const navigate = useNavigate();
 
-  const PaginaAdministracion = () => {
-    navigate("/administracion");
+  const PaginaAdministracionProductos = () => {
+    navigate("/administracion/productos");
+  };
+
+  const PaginaAdministracionCuentas = () => {
+    navigate("/administracion/cuentas");
   };
 
   useEffect(() => {
@@ -96,9 +100,17 @@ function NavbarCustom() {
                 {usuarioAdministrador && (
                   <Nav.Link
                     className="color-letra linea-bajo-texto"
-                    onClick={PaginaAdministracion}
+                    onClick={PaginaAdministracionProductos}
                   >
-                    Administracion
+                    Productos
+                  </Nav.Link>
+                )}
+                {usuarioAdministrador && (
+                  <Nav.Link
+                    className="color-letra linea-bajo-texto"
+                    onClick={PaginaAdministracionCuentas}
+                  >
+                    Cuentas
                   </Nav.Link>
                 )}
                 <Nav.Link

@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import endpoints from "../api/endpoints";
 import ProductAdmin from "../components/ProductAdmin";
 
-export default function Administracion() {
+export default function AdministracionProductos() {
   const [products, setProducts] = useState([]);
+
+  const navigate = useNavigate();
 
   const getAllProducts = async () => {
     try {
@@ -15,6 +18,10 @@ export default function Administracion() {
     }
   };
 
+  const handleClick = () => {
+    navigate("/administracion/productos/agregar");
+  };
+
   useEffect(() => {
     getAllProducts();
   }, []);
@@ -22,9 +29,12 @@ export default function Administracion() {
     <main className="mx-auto my-8">
       <h1 className="text-3xl font-bold">Productos</h1>
       <div className="mx-auto lg:w-2/5 flex flex-col gap-3 items-start">
-          <button className="color-boton text-white px-4 py-2 rounded-sm transition">
-            Agregar producto
-          </button>
+        <button
+          className="color-boton text-white px-4 py-2 rounded-sm transition"
+          onClick={() => handleClick()}
+        >
+          Agregar producto
+        </button>
         <table className="w-full table-auto border-collapse border border-slate-700">
           <thead>
             <tr className="border-b">
