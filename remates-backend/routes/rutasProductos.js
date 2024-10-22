@@ -1,4 +1,6 @@
 const express = require("express");
+const path = require("path");
+const fs = require("fs");
 
 const router = express.Router();
 const authenticateToken = require("../middleware/authenticateToken");
@@ -67,7 +69,6 @@ const crearProducto = async (req, res) => {
       imagen: req.file.filename,
       duracion,
       categoria,
-      disponibilidad: "No disponible",
     });
     await nuevoProducto.save();
     res.status(201).send(nuevoProducto);
@@ -88,19 +89,6 @@ const obtenerProductos = async (req, res) => {
     // Obtener productos con o sin filtro de categoría
     const productos = await Producto.find(filtro);
     const ahora = new Date();
-
-    // Actualizar la disponibilidad de los productos
-    productos.forEach(async (producto) => {
-      if (
-        producto.expiracion < ahora 
-      ) {
-        producto.disponibilidad = "no disponible";
-        await producto.save(); // Guardar el cambio en la base de datos
-      }
-      if (producto.expiracion > ahora) {
-        producto.disponibilidad = "disponible"
-      }
-    });
     res.status(200).json(productos);
   } catch (error) {
     res.status(500).json({ error: "Error al obtener productos" });
@@ -120,11 +108,71 @@ const obtenerProducto = async (req, res) => {
   }
 };
 
-// Eliminar producto
-const eliminarProducto = async (req, res) => {
+// actualizar
+const actualizarProducto = async (req, res) => {
+  const { id } = req.params;
   try {
-    await Producto.findByIdAndDelete(req.params.id);
-    res.status(204).send();
+    const product = await Producto.findById(id);
+    if (!product)
+      return res.status(400).send({ message: "El producto no existe" });
+    product.nombre = req.body.nombre || product.nombre;
+    product.descripcion = req.body.descripcion || product.descripcion;
+    product.precioInicial = req.body.precioInicial || product.precioInicial;
+    product.duracion = req.body.duracion || product.duracion;
+    product.categoria = req.body.categoria || product.categoria;
+    if (req.body.disponibilidad === "disponible") {
+      product.disponibilidad = req.body.disponibilidad;
+      const diaExpiracion = new Date();
+      diaExpiracion.setDate(diaExpiracion.getDate() + product.duracion);
+      product.expiracion = diaExpiracion;
+    }
+
+    if (req.file) {
+      const deleteImageFlag = await eliminarImagen(id);
+      if (deleteImageFlag >= 0) product.imagen = req.file.filename;
+      else
+        return res.status(500).send({
+          message: "Ha ocurrido un error al eliminar la imagen antigua",
+        });
+    }
+    await product.save();
+    res.status(200).send(product);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .send({ message: "Ha ocurrido un error al actualizar el producto" });
+  }
+};
+
+// Eliminar producto
+const eliminarImagen = async (productId) => {
+  try {
+    const productToDelete = await Producto.findById(productId);
+    let filePath = path.join(__dirname, "../images", productToDelete.imagen);
+    if (filePath.includes("\\")) filePath = filePath.replace("\\", "/");
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+      return 1; // imagen eliminada
+    } else return 0; // imagen no existe
+  } catch (error) {
+    console.error(error);
+    return -1; // error
+  }
+};
+const eliminarProducto = async (req, res) => {
+  const productId = req.params.id;
+  try {
+    const deleteImageFlag = await eliminarImagen(productId);
+    if (deleteImageFlag === 1) {
+      await Producto.findByIdAndDelete(productId);
+      res.status(204).send();
+    } else if (deleteImageFlag === 0)
+      return res.status(400).send({ message: "La imagen no existe" });
+    else
+      return res
+        .status(500)
+        .send({ message: "Ha ocurrido un error al eliminar la imagen" });
   } catch (error) {
     console.error(error);
     res
@@ -163,10 +211,14 @@ const agregarOferta = async (req, res) => {
   }
 };
 
+router.post("/:id/oferta", authenticateToken, agregarOferta);
 router
   .route("/")
   .post(upload.single("imagen"), crearProducto)
   .get(obtenerProductos);
-router.route("/:id").get(obtenerProducto).delete(eliminarProducto);
-router.post("/:id/oferta", authenticateToken, agregarOferta);
+router
+  .route("/:id")
+  .get(obtenerProducto)
+  .put(upload.single("imagen"), actualizarProducto)
+  .delete(eliminarProducto);
 module.exports = router;

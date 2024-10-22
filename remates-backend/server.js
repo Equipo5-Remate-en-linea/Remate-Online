@@ -3,6 +3,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const path = require("path");
+
 const rutasProductos = require("./routes/rutasProductos");
 const rutasUsuarios = require("./routes/rutasUsuarios");
 const rutasAutenticacion = require("./routes/rutasAutenticacion");
