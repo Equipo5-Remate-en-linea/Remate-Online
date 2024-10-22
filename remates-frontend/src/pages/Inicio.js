@@ -92,7 +92,7 @@ function Productos() {
                 <div className="producto-card" key={producto._id}>
                   <div className="producto-imagen">
                     {producto.imagen ? (
-                      <img src={producto.imagen_url} alt={producto.nombre} />
+                      <img src={`${endpoints.images}/${producto.imagen}`}/>
                     ) : (
                       <div className="placeholder-imagen">
                         Imagen no disponible
