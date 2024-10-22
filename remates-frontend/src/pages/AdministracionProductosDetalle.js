@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import Disponibilidad from "../components/Disponibilidad";
 import endpoints from "../api/endpoints";
@@ -10,11 +10,13 @@ export default function AdministracionProductosDetalle() {
   const [ofertaMasAlta, setOfertaMasAlta] = useState(0);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const [edited, setEdited] = useState(false);
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
 
-  // volver a productos
   const navigate = useNavigate();
 
+  // volver a productos
   const backToProducts = () => navigate("/administracion/productos");
 
   // pasar a remate
@@ -57,6 +59,16 @@ export default function AdministracionProductosDetalle() {
     getProduct();
   }, []);
 
+  // setear si se edito el producto
+  useEffect(() => {
+    if (searchParams.get("edited") === '1') {
+      setEdited(true);
+      setTimeout(() => {
+        setEdited(false);
+      }, 3000);
+    }
+  }, []);
+
   return (
     <main className="max-w-max mx-auto my-8 space-y-4">
       {success && (
@@ -67,6 +79,11 @@ export default function AdministracionProductosDetalle() {
       {error && (
         <p className="px-4 py-2 bg-red-600 text-white font-bold">
           Error al poner en remate el producto
+        </p>
+      )}
+      {edited && (
+        <p className="px-4 py-2 bg-green-600 text-white font-bold">
+          El producto ha sido actualizado exitosamente
         </p>
       )}
       <section className="max-w-max space-y-4 border px-8 py-4 rounded">
@@ -112,7 +129,10 @@ export default function AdministracionProductosDetalle() {
             >
               Rematar el producto
             </button>
-            <button className="w-full bg-blue-100 text-blue-600 px-4 py-2 rounded-sm hover:bg-blue-200 hover:text-blue-800 transition">
+            <button
+              className="w-full bg-blue-100 text-blue-600 px-4 py-2 rounded-sm hover:bg-blue-200 hover:text-blue-800 transition"
+              onClick={() => navigate(`/administracion/productos/editar/${id}`)}
+            >
               Editar
             </button>
           </div>

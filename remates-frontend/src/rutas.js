@@ -8,6 +8,7 @@ import AdministracionProductos from "./pages/AdministracionProductos";
 import AdministracionCuentas from "./pages/AdministracionCuentas";
 import AdministracionProductosDetalle from "./pages/AdministracionProductosDetalle";
 import AgregarProducto from "./pages/AgregarProducto";
+import EditarProducto from "./pages/EditarProducto";
 
 function Rutas() {
   return (
@@ -28,6 +29,10 @@ function Rutas() {
         <Route
           path="/administracion/productos/:id"
           element={<AdministracionProductosDetalle />}
+        />
+        <Route
+          path="/administracion/productos/editar/:id"
+          element={<EditarProducto />}
         />
         <Route
           path="/administracion/cuentas"
