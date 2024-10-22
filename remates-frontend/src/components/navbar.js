@@ -81,6 +81,7 @@ function NavbarCustom() {
           El Rincón del Olvido
         </Navbar.Brand>
         <Navbar.Toggle
+          id="Menu_hamburguesa"
           aria-controls="basic-navbar-nav"
           className="color-toggle"
         />
@@ -111,12 +112,14 @@ function NavbarCustom() {
             ) : (
               <Nav className="me-auto">
                 <Nav.Link
+                  id="Inicio_sesion"
                   className="color-letra linea-bajo-texto"
                   onClick={AbrirInicio}
                 >
                   Inicio sesion
                 </Nav.Link>
                 <Nav.Link
+                  id="Registro"
                   className="color-letra linea-bajo-texto"
                   onClick={AbrirRegistro}
                 >

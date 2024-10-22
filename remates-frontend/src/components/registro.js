@@ -86,7 +86,7 @@ function Registrarse({ estado, setEstado }) {
 
   return (
     <>
-      <Modal show={estado} onHide={Cerrar}>
+      <Modal id='Modal_registro' show={estado} onHide={Cerrar}>
         <Modal.Header closeButton>
           <Modal.Title>Registrate</Modal.Title>
         </Modal.Header>
@@ -95,6 +95,7 @@ function Registrarse({ estado, setEstado }) {
             <Form.Group className="mb-3">
               <Form.Label>Dirección de envio</Form.Label>
               <Form.Control
+                id="Direccion_envio"
                 type="text"
                 placeholder="Pasaje 123, Comuna"
                 value={direccion}
@@ -107,6 +108,7 @@ function Registrarse({ estado, setEstado }) {
             <Form.Group className="mb-3">
               <Form.Label>Dirección de correo</Form.Label>
               <Form.Control
+                id="Email"
                 type="email"
                 placeholder="name@example.com"
                 value={email}
@@ -117,6 +119,7 @@ function Registrarse({ estado, setEstado }) {
             <Form.Group className="mb-3">
               <Form.Label htmlFor="inputPassword5">Contraseña</Form.Label>
               <Form.Control
+                id="Contrasena"
                 type="password"
                 aria-describedby="passwordHelpBlock"
                 placeholder="Ingrese su contraseña"
@@ -132,6 +135,7 @@ function Registrarse({ estado, setEstado }) {
                 Confirme Contraseña
               </Form.Label>
               <Form.Control
+                id="TryContrasena"
                 type="password"
                 aria-describedby="passwordHelpBlock"
                 placeholder="Ingrese su contraseña"
@@ -143,7 +147,7 @@ function Registrarse({ estado, setEstado }) {
               />
             </Form.Group>
             <Modal.Footer>
-              <Button variant="primary" className="color-boton" type="submit">
+              <Button id="SubmitRegistrarse" variant="primary" className="color-boton" type="submit">
                 Registrarse
               </Button>
             </Modal.Footer>
