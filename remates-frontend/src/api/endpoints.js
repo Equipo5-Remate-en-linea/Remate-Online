@@ -6,6 +6,7 @@ const endpoints = {
   categorias: baseUrl + "/categorias",
   login: baseUrl + "/auth/login",
   usuarioAdmin: baseUrl + "/usuarios/admin",
+  images: baseUrl + "/images",
 };
 
 export default endpoints;

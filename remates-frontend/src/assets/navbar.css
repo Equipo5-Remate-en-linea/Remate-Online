@@ -30,7 +30,7 @@
 
 .color-toggle{
   color: white !important;
-  background-color: rgba(107,179,35,255) !important; /* Cambia este color según tus necesidades */
+  background-color: rgba(107,179,35,255) !important; 
   border-color: rgba(107,179,35)  !important; /* Cambia el color del borde */
 
 }

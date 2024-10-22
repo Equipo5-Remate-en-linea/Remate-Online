@@ -44,6 +44,7 @@ function InicioSesion({ estado, setEstado, setInicioExitoso }) {
         ) {
           setError("Correo o contraseña invalida");
         } else {
+          localStorage.setItem("token", data["token"]);
           document.cookie = `token=${data["token"]}; path=/; max-age=3600`;
           setError("");
           Cerrar();

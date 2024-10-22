@@ -1,10 +1,60 @@
 const express = require("express");
 const bcrypt = require('bcryptjs');
 
+
 const router = express.Router();
 
 const Usuario = require("../models/Usuarios");
 const authenticateToken = require("../middleware/authenticateToken");
+
+const nodemailer = require('nodemailer');
+
+// Configuración del transporte
+let transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+      user: 'r1nc0nd3l0lv1d0@gmail.com', // Tu correo electrónico
+      pass: 'urno wlrt mieh hqif',      // Tu contraseña o un App Password si tienes 2FA activado
+  },
+});
+
+function generarMensajeRegistroMisterioso() {
+  return `
+  Estimado/a,
+
+  Hemos recibido tu solicitud. A partir de este momento, formas parte de un círculo muy selecto.
+
+  La puerta está abierta. Lo que sucede a partir de ahora depende de ti. Sé discreto/a, y recuerda que las oportunidades que se presentan aquí no están al alcance de todos. 
+
+  Mantente atento/a. Los que saben mirar, encuentran lo que buscan.
+
+  No respondas a este mensaje.
+
+  El equipo.
+  `;
+}
+function obtenerMail(email) {
+  const msg_registro = generarMensajeRegistroMisterioso();
+  return {
+      from: 'r1nc0nd3l0lv1d0@gmail.com',
+      to: email,
+      subject: 'Notificación Registro de Cuenta',
+      text: msg_registro,
+  };
+}
+
+// Función para enviar correo
+function enviarCorreo(email) {
+  let mail = obtenerMail(email);
+
+  transporter.sendMail(mail, function(error, info) {
+      if (error) {
+          console.log(error);
+      } else {
+          console.log('Correo enviado: ' + info.response);
+      }
+  });
+}
 
 // Crear usuario
 const crearUsuario = async (req, res) => {
@@ -19,6 +69,7 @@ const crearUsuario = async (req, res) => {
     contrasena: contrasenaEncriptada,
     administrador: false,
   });
+  enviarCorreo(email);
   await nuevoUsuario.save();
   res.status(201).send(nuevoUsuario);
 };

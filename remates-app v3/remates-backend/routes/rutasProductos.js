@@ -3,7 +3,56 @@ const express = require("express");
 const router = express.Router();
 const authenticateToken = require("../middleware/authenticateToken");
 const Producto = require("../models/Producto");
+const Usuario = require("../models/Usuarios");
 
+const nodemailer = require('nodemailer');
+
+// Configuración del transporte
+let transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+      user: 'r1nc0nd3l0lv1d0@gmail.com', // Tu correo electrónico
+      pass: 'urno wlrt mieh hqif',      // Tu contraseña o un App Password si tienes 2FA activado
+  },
+});
+
+function generarMensajeOfertaMisteriosa(nombre_producto) {
+  return `
+  Estimado/a,
+
+  Tu oferta por el producto ${nombre_producto} ha sido recibida. A partir de ahora, te has unido a una pugna única y reservada para unos pocos.
+
+  El juego ha comenzado. Lo que ocurra de aquí en adelante está en tus manos. No pierdas de vista tu objetivo, y recuerda que las verdaderas oportunidades no esperan.
+
+  Mantente en guardia. Solo aquellos que saben actuar en el momento adecuado se llevan el premio.
+
+  No respondas a este mensaje.
+
+  El equipo.
+  `;
+}
+function obtenerMail(email, nombre_producto) {
+  const msg_registro = generarMensajeOfertaMisteriosa(nombre_producto);
+  return {
+      from: 'r1nc0nd3l0lv1d0@gmail.com',
+      to: email,
+      subject: 'Notificación Registro de Cuenta',
+      text: msg_registro,
+  };
+}
+
+// Función para enviar correo
+function enviarCorreo(email, nombre_producto) {
+  let mail = obtenerMail(email, nombre_producto);
+
+  transporter.sendMail(mail, function(error, info) {
+      if (error) {
+          console.log(error);
+      } else {
+          console.log('Correo enviado: ' + info.response);
+      }
+  });
+}
 // Crear producto
 const crearProducto = async (req, res) => {
   const { nombre, precioInicial, descripcion, imagen, duracion, categoria } =
@@ -74,10 +123,16 @@ const agregarOferta = async (req, res) => {
     const idCuenta = req.user.id; // ID del usuario (obtenido del token)
 
     const producto = await Producto.findById(id);
+    const usuario = await Usuario.findById(idCuenta);
 
     if (!producto || producto.disponibilidad !== "disponible") {
       return res.status(400).send("El producto no está disponible para ofertas");
     }
+
+    const nombreProducto = producto.nombre;
+    const email = usuario.email;
+    
+    enviarCorreo(email, nombreProducto);
 
     // Agregar la nueva oferta
     producto.ofertas.push({ idCuenta, precioOfertante });

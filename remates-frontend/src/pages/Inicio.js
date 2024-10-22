@@ -10,6 +10,7 @@ function Productos() {
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
   const [filtroPrecio, setFiltroPrecio] = useState(""); // Estado para el filtro de precio
   const [filtroFecha, setFiltroFecha] = useState(""); // Estado para el filtro de fecha
+  const [busqueda, setBusqueda] = useState(""); // Estado para la búsqueda por nombre
 
   useEffect(() => {
     // Hacer la solicitud al backend para obtener los productos de la categoría seleccionada
@@ -25,7 +26,7 @@ function Productos() {
       );
   }, [categoriaSeleccionada]);
 
-  // Filtrar productos según precio y fecha
+  // Filtrar productos según precio, fecha y búsqueda por nombre
   const filtrarProductos = () => {
     let filtrados = [...productos]; // Copiamos los productos originales
 
@@ -38,9 +39,16 @@ function Productos() {
 
     // Filtrar por fecha
     if (filtroFecha === "mas-reciente") {
-      filtrados.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+      filtrados.sort((a, b) => new Date(b.expiracion) - new Date(a.expiracion));
     } else if (filtroFecha === "mas-antiguo") {
-      filtrados.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+      filtrados.sort((a, b) => new Date(a.expiracion) - new Date(b.expiracion));
+    }
+
+    // Filtrar por búsqueda de nombre
+    if (busqueda) {
+      filtrados = filtrados.filter((producto) =>
+        producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
+      );
     }
 
     return filtrados;
@@ -55,6 +63,15 @@ function Productos() {
       ) : (
         <>
           <div className="filtros">
+            {/* Input de búsqueda por nombre */}
+            <input
+              type="text"
+              placeholder="Buscar por nombre"
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
+              className="buscador"
+            />
+
             <select onChange={(e) => setFiltroPrecio(e.target.value)}>
               <option value="">Filtrar por Precio</option>
               <option value="menor-mayor">Precio: Menor a Mayor</option>
@@ -62,18 +79,19 @@ function Productos() {
             </select>
 
             <select onChange={(e) => setFiltroFecha(e.target.value)}>
-              <option value="">Filtrar por Fecha</option>
-              <option value="mas-reciente">Fecha: Más Reciente</option>
-              <option value="mas-antiguo">Fecha: Más Antiguo</option>
+              <option value="">Filtrar por Fecha de expiracion</option>
+              <option value="mas-reciente">Fecha: Más Antiguo</option>
+              <option value="mas-antiguo">Fecha: Más Reciente</option>
             </select>
           </div>
+
           <div className="productos-grid">
             {productosFiltrados.length > 0 ? (
               productosFiltrados.map((producto) => (
                 <div className="producto-card" key={producto._id}>
                   <div className="producto-imagen">
                     {producto.imagen ? (
-                      <img src={producto.imagen} alt={producto.nombre} />
+                      <img src={producto.imagen_url} alt={producto.nombre} />
                     ) : (
                       <div className="placeholder-imagen">
                         Imagen no disponible
@@ -83,7 +101,7 @@ function Productos() {
                   <h2>{producto.nombre}</h2>
                   <p>{producto.descripcion}</p>
                   <p>Precio inicial: ${producto.precioInicial}</p>
-                  {/* Agregamos el enlace para redirigir a la página de detalles del producto */}
+                  <p>Estado: {producto.disponibilidad}</p>
                   <Link to={`/producto/${producto._id}`}>
                     <button className="px-4 py-2 text-white mt-4 rounded-sm color-boton transition">Ver detalles</button>
                   </Link>
