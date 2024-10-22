@@ -22,6 +22,7 @@ export default function FormAgregarProducto() {
   const [invalidAuctionDuration, setInvalidAuctionDuration] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const [errorByRequired, setErrorByRequired] = useState(false);
 
   // resetear producto
   const resetProduct = () =>
@@ -54,9 +55,9 @@ export default function FormAgregarProducto() {
       Object.values(product).includes("") ||
       Object.values(product).includes({})
     ) {
-      setError(true);
+      setErrorByRequired(true);
       setTimeout(() => {
-        setError(false);
+        setErrorByRequired(false);
       }, 3000);
       return;
     }
@@ -64,11 +65,7 @@ export default function FormAgregarProducto() {
       await axios.post(endpoints.productos, product, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      resetProduct();
-      setSuccess(true);
-      setTimeout(() => {
-        setSuccess(false);
-      }, 3000);
+      navigate("/administracion/productos/?added=1");
     } catch (error) {
       console.log("Ha ocurrido un error al agregar el producto:", error);
       setError(true);
@@ -233,7 +230,7 @@ export default function FormAgregarProducto() {
       >
         Volver a Productos
       </button>
-      {error && (
+      {errorByRequired && (
         <p className="text-red-600">Todos los campos son obligatorios</p>
       )}
     </form>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import endpoints from "../api/endpoints";
 import ProductAdmin from "../components/ProductAdmin";
@@ -8,9 +8,17 @@ export default function AdministracionProductos() {
   const [products, setProducts] = useState([]);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const [added, setAdded] = useState(false)
+  const [searchParams] = useSearchParams();
 
   const navigate = useNavigate();
 
+  // redireccionar a agregar
+  const handleClick = () => {
+    navigate("/administracion/productos/agregar");
+  };
+
+  // cargar productos
   const getAllProducts = async () => {
     try {
       const { data } = await axios.get(endpoints.productos);
@@ -20,12 +28,18 @@ export default function AdministracionProductos() {
     }
   };
 
-  const handleClick = () => {
-    navigate("/administracion/productos/agregar");
-  };
-
   useEffect(() => {
     getAllProducts();
+  }, []);
+
+  // setear si se creo un producto
+  useEffect(() => {
+    if (searchParams.get("added") === '1') {
+      setAdded(true);
+      setTimeout(() => {
+        setAdded(false);
+      }, 3000);
+    }
   }, []);
   return (
     <main className="mx-auto my-8">
@@ -39,6 +53,11 @@ export default function AdministracionProductos() {
         {error && (
           <p className="w-full p-2 bg-red-600 text-white font-bold text-center">
             Error al eliminar el producto
+          </p>
+        )}
+        {added && (
+          <p className="w-full p-2 bg-green-600 text-white font-bold text-center">
+            Producto agregado correctamente
           </p>
         )}
         <button
