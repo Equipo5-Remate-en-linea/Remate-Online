@@ -1,4 +1,6 @@
 const express = require("express");
+const path = require("path");
+const fs = require("fs");
 
 const router = express.Router();
 
@@ -72,10 +74,33 @@ const obtenerProducto = async (req, res) => {
 };
 
 // Eliminar producto
-const eliminarProducto = async (req, res) => {
+const eliminarImagen = async (productId) => {
   try {
-    await Producto.findByIdAndDelete(req.params.id);
-    res.status(204).send();
+    const productToDelete = await Producto.findById(productId);
+    let filePath = path.join(__dirname, "../images", productToDelete.imagen);
+    if (filePath.includes("\\")) filePath = filePath.replace("\\", "/");
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+      return 1; // imagen eliminada
+    } else return 0; // imagen no existe
+  } catch (error) {
+    console.error(error);
+    return -1; // error
+  }
+};
+const eliminarProducto = async (req, res) => {
+  const productId = req.params.id;
+  try {
+    const deleteImageFlag = await eliminarImagen(productId);
+    if (deleteImageFlag === 1) {
+      await Producto.findByIdAndDelete(productId);
+      res.status(204).send();
+    } else if (deleteImageFlag === 0)
+      return res.status(400).send({ message: "La imagen no existe" });
+    else
+      return res
+        .status(500)
+        .send({ message: "Ha ocurrido un error al eliminar la imagen" });
   } catch (error) {
     console.error(error);
     res

@@ -11,7 +11,6 @@ export default function ProductAdmin({
 }) {
   // manejar eliminar
   const updateProducts = () => {
-    const objectIndex = products.indexOf(product);
     const updatedProducts = products.filter((p) => p._id !== product._id);
     setProducts(updatedProducts);
   };
