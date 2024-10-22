@@ -5,7 +5,8 @@ const puppeteer = require('puppeteer');
   const page = await browser.newPage();
 
   await page.goto('http://localhost:3000/', { waitUntil: 'networkidle2' });
-
+  await page.click('#Menu_hamburguesa');
+  await page.waitForSelector('#Registro');
   // Encuentra y muestra todos los elementos clicleables
   const clickableElements = await page.evaluate(() => {
     // Obtiene todos los elementos de la página

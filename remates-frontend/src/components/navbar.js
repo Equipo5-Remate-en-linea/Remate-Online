@@ -30,8 +30,11 @@ function NavbarCustom() {
   };
 
   useEffect(() => {
-    if (getCookie("token") !== null) {
+    console.log(getCookieValue("token"));
+    if (getCookieValue("token") !== null) {
       setInicioExitoso(true);
+    } else{
+      setInicioExitoso(false);
     }
     console.log("El componente se ha cargado");
 
@@ -41,11 +44,31 @@ function NavbarCustom() {
     };
   }, []);
 
-  const getCookie = (name) => {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(";").shift();
-    return null;
+  // const getCookie = (name) => {
+  //   console.log(`${document.cookie}`);
+  //   const value = `; ${document.cookie}`;
+  //   const parts = value.split(`; ${name}=`);
+  //   if (parts.length === 2) return parts.pop().split(";").shift();
+  //   return null;
+  // };
+
+  const getCookieValue = (name) => {
+    // Obtener todas las cookies
+    const cookies = document.cookie.split('; '); 
+    // Buscar la cookie específica
+    for (let cookie of cookies) {
+      // Separar el nombre y el valor
+      const [key, value] = cookie.split('=');
+      // Si encontramos la cookie, devolvemos el valor (incluyendo 'null' como string)
+      if (key === name) {
+        if(value === "null"){
+          return null;
+        } else{
+          return true;
+        }
+      }
+    }
+    return null; // Devolver null si no se encuentra la cookie
   };
 
   const BorrarCookie = () => {

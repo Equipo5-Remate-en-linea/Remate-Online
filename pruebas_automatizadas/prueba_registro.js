@@ -8,14 +8,19 @@ const puppeteer = require('puppeteer');
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
 
-  await page.setViewport({ width: 1280, height: 800 });
-
   // Navega a la página de prueba
   await page.goto('http://localhost:3000/', { waitUntil: 'networkidle2' });
 
   // Haz clic en el botón de "Registro" usando el selector CSS
-  await page.click('#Registro'); // Cambia el selector según tu caso
+  const { width, height } = await page.viewport();
 
+  if (width > 768) {
+    await page.click('#Registro'); // Cambia el selector según tu caso
+  } else{
+    await page.click('#Menu_hamburguesa');
+    await page.waitForSelector('#Registro');
+    await page.click('#Registro');
+  }
   // Espera a que el formulario de registro se cargue
   await page.waitForSelector('#Modal_registro'); // Selector del formulario
 
