@@ -9,6 +9,16 @@
     margin-bottom: 20px;
   }
   
+  /* Estilo para el buscador */
+  .buscador {
+    padding: 8px;
+    width: 250px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+
   /* Grid de productos */
   .productos-grid {
     display: grid;

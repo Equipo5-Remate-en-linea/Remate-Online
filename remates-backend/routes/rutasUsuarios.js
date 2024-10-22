@@ -1,11 +1,13 @@
 const express = require("express");
 const bcrypt = require('bcryptjs');
-const nodemailer = require('nodemailer');
+
 
 const router = express.Router();
 
 const Usuario = require("../models/Usuarios");
 const authenticateToken = require("../middleware/authenticateToken");
+
+const nodemailer = require('nodemailer');
 
 // Configuración del transporte
 let transporter = nodemailer.createTransport({
@@ -53,7 +55,6 @@ function enviarCorreo(email) {
       }
   });
 }
-
 
 // Crear usuario
 const crearUsuario = async (req, res) => {
