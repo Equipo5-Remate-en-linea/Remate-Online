@@ -1,1 +1,1 @@
-El formulario no se envió correctamente debido a una validación fallida.
+Formulario no se envio correctamente, campo invalido

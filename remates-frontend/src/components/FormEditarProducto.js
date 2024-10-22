@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import endpoints from "../api/endpoints";
 
-export default function FormAgregarProducto() {
+export default function FormEditarProducto({ productId }) {
   // constantes
   const FIELDS_CLASSES = "flex flex-col items-start gap-2";
   const INPUTS_CLASSES = "border border-slate-600 rounded-sm px-2 py-1 w-full";
@@ -20,9 +20,9 @@ export default function FormAgregarProducto() {
   const [categories, setCategories] = useState([]);
   const [invalidInitialValue, setInvalidInitialValue] = useState(false);
   const [invalidAuctionDuration, setInvalidAuctionDuration] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const [errorByRequired, setErrorByRequired] = useState(false);
+  const navigate = useNavigate();
 
   // resetear producto
   const resetProduct = () =>
@@ -48,13 +48,10 @@ export default function FormAgregarProducto() {
     else setInvalidAuctionDuration(false);
   };
 
-  // agregar producto al backend
+  // actualizar producto en el backend
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      Object.values(product).includes("") ||
-      Object.values(product).includes({})
-    ) {
+    if (Object.values(product).includes("")) {
       setErrorByRequired(true);
       setTimeout(() => {
         setErrorByRequired(false);
@@ -62,12 +59,12 @@ export default function FormAgregarProducto() {
       return;
     }
     try {
-      await axios.post(endpoints.productos, product, {
+      await axios.put(`${endpoints.productos}/${productId}`, product, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      navigate("/administracion/productos/?added=1");
+      navigate(`/administracion/productos/${productId}/?edited=1`)
     } catch (error) {
-      console.log("Ha ocurrido un error al agregar el producto:", error);
+      console.log("Ha ocurrido un error al actualizar el producto:", error);
       setError(true);
       setTimeout(() => {
         setError(false);
@@ -75,13 +72,25 @@ export default function FormAgregarProducto() {
     }
   };
 
-  // volver a productos
-  const navigate = useNavigate();
-
-  const backToProducts = () => {
+  // volver al detalle del producto
+  const backToProductDetails = () => {
     resetProduct();
-    navigate("/administracion/productos");
+    navigate(`/administracion/productos/${productId}`);
   };
+
+  // cargar datos del producto
+  const getProduct = async () => {
+    try {
+      const { data } = await axios.get(`${endpoints.productos}/${productId}`);
+      setProduct(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getProduct();
+  }, []);
 
   // cargar categorias al select
   const getCategories = async () => {
@@ -89,7 +98,7 @@ export default function FormAgregarProducto() {
       const { data } = await axios.get(endpoints.categorias);
       setCategories(data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   useEffect(() => {
@@ -98,16 +107,10 @@ export default function FormAgregarProducto() {
 
   return (
     <form
-      id="Formulario_agregar"
       className="max-w-max mx-auto px-16 py-8 border rounded space-y-4 shadow-sm"
       encType="multipart/form-data"
       onSubmit={handleSubmit}
     >
-      {success && (
-        <p className="px-4 py-2 bg-green-600 text-white font-bold">
-          Producto agregado correctamente
-        </p>
-      )}
       {error && (
         <p className="px-4 py-2 bg-red-600 text-white font-bold">
           Error al agregar el producto
@@ -120,7 +123,7 @@ export default function FormAgregarProducto() {
         </label>
         <input
           type="text"
-          id="nombre_producto"
+          id="nombre"
           name="nombre"
           placeholder="Ej: Adaptador VGA a HDMI"
           className={INPUTS_CLASSES}
@@ -134,7 +137,7 @@ export default function FormAgregarProducto() {
           Descripción
         </label>
         <textarea
-          id="descripcion_producto"
+          id="descripcion"
           name="descripcion"
           rows="4"
           placeholder="Ej: Adaptador para cables VGA con salida a HDMI"
@@ -148,11 +151,11 @@ export default function FormAgregarProducto() {
       {/* imagen */}
       <div className={FIELDS_CLASSES}>
         <label className="font-semibold" htmlFor="image">
-          Imagen
+          Imagen <span className="font-light">(Opcional)</span>
         </label>
         <input
           type="file"
-          id="imagen_producto"
+          id="imagen"
           name="imagen"
           accept=".png, .jpg, .jpeg"
           className={INPUTS_CLASSES}
@@ -160,6 +163,9 @@ export default function FormAgregarProducto() {
             setProduct({ ...product, imagen: e.target.files[0] })
           }
         />
+        <p className="text-sm font-light">
+          De no subir una nueva imagen, se mantendrá la actual
+        </p>
       </div>
       {/* valor inicial */}
       <div className={FIELDS_CLASSES}>
@@ -186,7 +192,7 @@ export default function FormAgregarProducto() {
         </label>
         <input
           type="number"
-          id="duracion_remate"
+          id="duracion"
           name="duracion"
           placeholder="Ej: 14"
           className={INPUTS_CLASSES}
@@ -203,9 +209,10 @@ export default function FormAgregarProducto() {
           Categoría
         </label>
         <select
-          id="categoria_producto"
+          id="categoria"
           htmlFor="categoria"
           className={INPUTS_CLASSES}
+          value={product.categoria}
           onChange={(e) =>
             setProduct({ ...product, categoria: e.target.value })
           }
@@ -221,19 +228,18 @@ export default function FormAgregarProducto() {
         </select>
       </div>
       <input
-        id="submitAgregarProducto"
         type="submit"
-        value="Agregar producto"
+        value="Actualizar producto"
         className="w-full color-boton text-white px-4 py-2 rounded-sm transition"
       />
       <button
         className="w-full bg-blue-50 text-blue-600 px-4 py-2 rounded-sm hover:bg-blue-200 hover:text-blue-800 transition"
-        onClick={backToProducts}
+        onClick={backToProductDetails}
       >
-        Volver a Productos
+        Volver al detalle
       </button>
       {errorByRequired && (
-        <p className="text-red-600">Todos los campos son obligatorios</p>
+        <p className="text-red-600">Faltan campos obligatorios</p>
       )}
     </form>
   );

@@ -14,25 +14,26 @@ function Categorias({ onCategoriaSeleccionada }) {
   }, []);
 
   return (
-    <div className="categorias-container">
-      <h1>Selecciona una Categoría</h1>
-      <div className="categorias-grid">
-        {categorias.length > 0 ? (
-          categorias.map((categoria) => (
-            <div
-              key={categoria._id}
-              className="categoria-card"
-              onClick={() => onCategoriaSeleccionada(categoria.nombre)}
-            >
-              <img src={categoria.imagen} alt={categoria.nombre} />
-              <h2>{categoria.nombre}</h2>
-            </div>
-          ))
-        ) : (
-          <p>No hay categorías disponibles</p>
-        )}
-      </div>
-    </div>
+<div className="categorias-container">
+  <h1>Selecciona una Categoría</h1>
+  <div className="categorias-grid">
+    {categorias.length > 0 ? (
+      categorias.map((categoria, index) => (  // Agrega el índice como segundo argumento
+        <div
+          id={`categoria_${index}`}  // Asigna el id usando el índice
+          key={categoria._id}
+          className="categoria-card"
+          onClick={() => onCategoriaSeleccionada(categoria.nombre)}
+        >
+          <img src={categoria.imagen} alt={categoria.nombre} />
+          <h2>{categoria.nombre}</h2>
+        </div>
+      ))
+    ) : (
+      <p>No hay categorías disponibles</p>
+    )}
+  </div>
+</div>
   );
 }
 

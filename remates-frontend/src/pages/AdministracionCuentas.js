@@ -77,6 +77,7 @@ function AdministracionCuentas() {
           {usuarios.length > 0 ? (
             usuarios.map((usuario, index) => (
               <tr
+                id={`usuario_${index}`}
                 key={usuario._id}
                 onClick={() => CambiarEstadoAdministrador(usuario)} // Hacemos la fila clickeable
                 style={{ cursor: "pointer" }}

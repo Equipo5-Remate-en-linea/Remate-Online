@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const ofertaSchema = new mongoose.Schema({
   idCuenta: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario', required: true },
@@ -17,5 +17,5 @@ const productoSchema = new mongoose.Schema({
   disponibilidad: { type: String, default: 'disponible' }, // Aseguramos que el campo exista
 });
 
-const Producto = mongoose.model('Producto', productoSchema);
+const Producto = mongoose.model("Producto", productoSchema);
 module.exports = Producto;

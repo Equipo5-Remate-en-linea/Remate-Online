@@ -5,8 +5,21 @@ const puppeteer = require('puppeteer');
   const page = await browser.newPage();
 
   await page.goto('http://localhost:3000/', { waitUntil: 'networkidle2' });
-  await page.click('#Menu_hamburguesa');
-  await page.waitForSelector('#Registro');
+
+  const { width, height } = await page.viewport();
+  
+  if (width > 800) {
+    await page.click('#Inicio_sesion'); // Cambia el selector según tu caso
+  } else{
+    await page.click('#Menu_hamburguesa');
+    await page.waitForSelector('#Inicio_sesion');
+    await page.click('#Inicio_sesion');
+  }
+
+  await page.waitForSelector('#Modal_inicio_sesion'); // Selector del formulario
+
+
+
   // Encuentra y muestra todos los elementos clicleables
   const clickableElements = await page.evaluate(() => {
     // Obtiene todos los elementos de la página
@@ -44,5 +57,5 @@ const puppeteer = require('puppeteer');
   // Muestra los elementos clicleables en la consola
   console.log('Elementos clicleables:', clickableElements);
 
-  await browser.close();
+  // await browser.close();
 })();

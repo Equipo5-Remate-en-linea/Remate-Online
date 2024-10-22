@@ -58,9 +58,10 @@ function InicioSesion({ estado, setEstado, setInicioExitoso }) {
 
   return (
     <>
-      <Modal show={estado} onHide={Cerrar}>
-        <Modal.Header closeButton>
+      <Modal id='Modal_inicio_sesion' show={estado} onHide={Cerrar}>
+        <Modal.Header>
           <Modal.Title>Iniciar Sesión</Modal.Title>
+          <closeButton id="Cerrar_inicio_sesion" className="btn-close" onClick={Cerrar}   style={{ cursor: 'pointer' }} />
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={iniciar_sesion}>
@@ -68,6 +69,7 @@ function InicioSesion({ estado, setEstado, setInicioExitoso }) {
               <Form.Label>Dirección de correo</Form.Label>
               <Form.Control
                 type="email"
+                id="Email"
                 placeholder="name@example.com"
                 value={email}
                 onChange={ActualizarEmail}
@@ -78,6 +80,7 @@ function InicioSesion({ estado, setEstado, setInicioExitoso }) {
               <Form.Label htmlFor="inputPassword5">Password</Form.Label>
               <Form.Control
                 type="password"
+                id="Contrasena"
                 aria-describedby="passwordHelpBlock"
                 placeholder="Ingrese su contraseña"
                 value={password}
@@ -87,7 +90,7 @@ function InicioSesion({ estado, setEstado, setInicioExitoso }) {
               {error && <p style={{ color: "red" }}>{error}</p>}
             </Form.Group>
             <Modal.Footer>
-              <Button variant="primary" className="color-boton" type="submit">
+              <Button id="SubmitInicioSesion" variant="primary" className="color-boton" type="submit">
                 Iniciar sesión
               </Button>
             </Modal.Footer>

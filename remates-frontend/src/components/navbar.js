@@ -73,6 +73,7 @@ function NavbarCustom() {
 
   const BorrarCookie = () => {
     document.cookie = "token=; path=/; max-age=0; SameSite=Strict";
+    localStorage.clear();
     setInicioExitoso(false);
   };
 
@@ -123,6 +124,7 @@ function NavbarCustom() {
               <Nav className="me-auto">
                 {usuarioAdministrador && (
                   <Nav.Link
+                    id="Administrar_productos"
                     className="color-letra linea-bajo-texto"
                     onClick={PaginaAdministracionProductos}
                   >
@@ -131,6 +133,7 @@ function NavbarCustom() {
                 )}
                 {usuarioAdministrador && (
                   <Nav.Link
+                    id="Administrar_cuentas"
                     className="color-letra linea-bajo-texto"
                     onClick={PaginaAdministracionCuentas}
                   >

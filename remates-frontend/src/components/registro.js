@@ -87,8 +87,9 @@ function Registrarse({ estado, setEstado }) {
   return (
     <>
       <Modal id='Modal_registro' show={estado} onHide={Cerrar}>
-        <Modal.Header closeButton>
+        <Modal.Header >
           <Modal.Title>Registrate</Modal.Title>
+          <closeButton id="Cerrar_registro" className="btn-close" onClick={Cerrar}   style={{ cursor: 'pointer' }} />
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={crearUsuario}>
@@ -155,8 +156,9 @@ function Registrarse({ estado, setEstado }) {
         </Modal.Body>
       </Modal>
       <Modal show={estadoCuenta} onHide={Cerrar_estado}>
-        <Modal.Header closeButton>
+        <Modal.Header>
           <Modal.Title>{estadoCuentaTextoTitulo}</Modal.Title>
+          <closeButton id="Cerrar_creado_exito" className="btn-close" onClick={Cerrar}   style={{ cursor: 'pointer' }} />
         </Modal.Header>
         <Modal.Body>
           {estadoCuentaTextoCuerpo}

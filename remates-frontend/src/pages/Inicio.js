@@ -65,6 +65,7 @@ function Productos() {
           <div className="filtros">
             {/* Input de búsqueda por nombre */}
             <input
+              id="filtro_nombre"
               type="text"
               placeholder="Buscar por nombre"
               value={busqueda}
@@ -72,22 +73,22 @@ function Productos() {
               className="buscador"
             />
 
-            <select onChange={(e) => setFiltroPrecio(e.target.value)}>
+            <select id="filtro_precio" onChange={(e) => setFiltroPrecio(e.target.value)}>
               <option value="">Filtrar por Precio</option>
               <option value="menor-mayor">Precio: Menor a Mayor</option>
               <option value="mayor-menor">Precio: Mayor a Menor</option>
             </select>
 
-            <select onChange={(e) => setFiltroFecha(e.target.value)}>
+            <select id="filtro_fecha" onChange={(e) => setFiltroFecha(e.target.value)}>
               <option value="">Filtrar por Fecha de expiracion</option>
-              <option value="mas-reciente">Fecha: Más Antiguo</option>
-              <option value="mas-antiguo">Fecha: Más Reciente</option>
+              <option value="mas-antiguo">Fecha: Más Antiguo</option>
+              <option value="mas-reciente">Fecha: Más Reciente</option>
             </select>
           </div>
 
           <div className="productos-grid">
             {productosFiltrados.length > 0 ? (
-              productosFiltrados.map((producto) => (
+              productosFiltrados.map((producto, index) => (
                 <div className="producto-card" key={producto._id}>
                   <div className="producto-imagen">
                     {producto.imagen ? (
@@ -103,7 +104,7 @@ function Productos() {
                   <p>Precio inicial: ${producto.precioInicial}</p>
                   <p>Estado: {producto.disponibilidad}</p>
                   <Link to={`/producto/${producto._id}`}>
-                    <button className="px-4 py-2 text-white mt-4 rounded-sm color-boton transition">Ver detalles</button>
+                    <button id={`producto_${index}`} className="px-4 py-2 text-white mt-4 rounded-sm color-boton transition">Ver detalles</button>
                   </Link>
                 </div>
               ))
