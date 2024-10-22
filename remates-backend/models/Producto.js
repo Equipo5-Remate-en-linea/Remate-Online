@@ -9,6 +9,7 @@ const productoSchema = new mongoose.Schema({
   expiracion: { type: Date, required: false, default: new Date() },
   ofertas: [{ type: Number }], // Array para las ofertas
   categoria: { type: String, required: true },
+  disponibilidad: { type: String, required: false, default: "No disponible" },
 });
 
 const Producto = mongoose.model("Producto", productoSchema);
