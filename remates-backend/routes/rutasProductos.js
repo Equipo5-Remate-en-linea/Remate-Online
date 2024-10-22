@@ -41,18 +41,6 @@ const obtenerProductos = async (req, res) => {
     // Obtener productos con o sin filtro de categoría
     const productos = await Producto.find(filtro);
     const ahora = new Date();
-
-    // Actualizar la disponibilidad de los productos
-    productos.forEach(async (producto) => {
-      if (
-        producto.duracion < ahora &&
-        producto.disponibilidad === "disponible"
-      ) {
-        producto.disponibilidad = "no disponible";
-        await producto.save(); // Guardar el cambio en la base de datos
-      }
-    });
-
     res.status(200).json(productos);
   } catch (error) {
     res.status(500).json({ error: "Error al obtener productos" });
@@ -69,6 +57,43 @@ const obtenerProducto = async (req, res) => {
     res.status(200).json(producto);
   } catch (error) {
     res.status(500).json({ error: "Error al obtener el producto" });
+  }
+};
+
+// actualizar
+const actualizarProducto = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const product = await Producto.findById(id);
+    if (!product)
+      return res.status(400).send({ message: "El producto no existe" });
+    product.nombre = req.body.nombre || product.nombre;
+    product.descripcion = req.body.descripcion || product.descripcion;
+    product.precioInicial = req.body.precioInicial || product.precioInicial;
+    product.duracion = req.body.duracion || product.duracion;
+    product.categoria = req.body.categoria || product.categoria;
+    if (req.body.disponibilidad === "disponible") {
+      product.disponibilidad = req.body.disponibilidad;
+      const diaExpiracion = new Date();
+      diaExpiracion.setDate(diaExpiracion.getDate() + product.duracion);
+      product.expiracion = diaExpiracion;
+    }
+
+    if (req.file) {
+      const deleteImageFlag = await eliminarImagen(id);
+      if (deleteImageFlag >= 0) product.imagen = req.file.filename;
+      else
+        return res.status(500).send({
+          message: "Ha ocurrido un error al eliminar la imagen antigua",
+        });
+    }
+    await product.save();
+    res.status(200).send(product);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .send({ message: "Ha ocurrido un error al actualizar el producto" });
   }
 };
 
@@ -112,6 +137,10 @@ router
   .route("/")
   .post(upload.single("imagen"), crearProducto)
   .get(obtenerProductos);
-router.route("/:id").get(obtenerProducto).delete(eliminarProducto);
+router
+  .route("/:id")
+  .get(obtenerProducto)
+  .put(upload.single("imagen"), actualizarProducto)
+  .delete(eliminarProducto);
 
 module.exports = router;

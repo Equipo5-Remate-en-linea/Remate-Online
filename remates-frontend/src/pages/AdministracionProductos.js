@@ -51,7 +51,8 @@ export default function AdministracionProductos() {
           <thead>
             <tr className="border-b">
               <th className="px-4 py-2">Producto</th>
-              <th className="px-4 py-2">Acciones</th>
+              <th className="px-4 py-2 text-center">Disponibilidad</th>
+              <th className="px-4 py-2 text-center">Acciones</th>
             </tr>
           </thead>
           <tbody>

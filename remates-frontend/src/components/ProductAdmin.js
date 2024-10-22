@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Disponibilidad from "./Disponibilidad";
 import endpoints from "../api/endpoints";
 
 export default function ProductAdmin({
@@ -50,6 +51,9 @@ export default function ProductAdmin({
           className="w-24"
         />
         <span>{product.nombre}</span>
+      </td>
+      <td>
+        <Disponibilidad disponibilidad={product.disponibilidad} center={true} />
       </td>
       <td className="px-4 py-2">
         <div className="flex flex-col gap-3 md:flex-col-reverse">

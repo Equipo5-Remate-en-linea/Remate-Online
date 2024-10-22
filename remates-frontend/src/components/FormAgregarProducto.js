@@ -106,12 +106,12 @@ export default function FormAgregarProducto() {
       onSubmit={handleSubmit}
     >
       {success && (
-        <p className="px-2 py-1 bg-green-600 text-white font-bold">
+        <p className="px-4 py-2 bg-green-600 text-white font-bold">
           Producto agregado correctamente
         </p>
       )}
       {error && (
-        <p className="px-2 py-1 bg-red-600 text-white font-bold">
+        <p className="px-4 py-2 bg-red-600 text-white font-bold">
           Error al agregar el producto
         </p>
       )}
