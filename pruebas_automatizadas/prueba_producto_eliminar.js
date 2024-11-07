@@ -7,6 +7,7 @@ const puppeteer = require('puppeteer');
 
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
+  errorMessage = false;
 
   page.once('dialog', async dialog => {
     console.log(dialog.message());
@@ -44,6 +45,7 @@ const puppeteer = require('puppeteer');
 
     resultMessage1 = 'Producto eliminado exitosamente'
   } catch{
+    errorMessage = true;
     resultMessage1 = 'Fallo al eliminar producto'
   }
 
@@ -55,4 +57,5 @@ const puppeteer = require('puppeteer');
   console.log(resultMessage1);
 
   await browser.close();
+  process.exit(errorMessage ? 1 : 0);
 })();
