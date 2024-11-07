@@ -6,6 +6,7 @@ const puppeteer = require('puppeteer');
 
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
+  errorMessage = false;
 
   await page.goto('http://localhost:3000/', { waitUntil: 'networkidle2' });
 
@@ -30,6 +31,7 @@ const puppeteer = require('puppeteer');
     await page.waitForSelector('#Modal_inicio_sesion', { hidden: true, timeout: 5000  });
     resultMessage = 'El formulario se envió correctamente';
   } catch{
+    errorMessage = true;
     resultMessage = 'Formulario no se envio correctamente, campo invalido'
   }
 
@@ -41,4 +43,5 @@ const puppeteer = require('puppeteer');
   console.log(resultMessage);
 
   await browser.close();
+  process.exit(errorMessage ? 1 : 0);
 })();
