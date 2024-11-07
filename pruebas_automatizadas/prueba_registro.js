@@ -45,4 +45,5 @@ const puppeteer = require('puppeteer');
   console.log(resultMessage);
 
   await browser.close();
+  process.exit(errorMessage ? 1 : 0);
 })();
