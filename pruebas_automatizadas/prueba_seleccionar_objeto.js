@@ -6,6 +6,7 @@ const puppeteer = require('puppeteer');
 
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
+  errorMessage = false;
 
   await page.goto('http://localhost:3000/', { waitUntil: 'networkidle2' });
 
@@ -40,9 +41,11 @@ const puppeteer = require('puppeteer');
       await page.click('#producto_'+randomNumber);
       resultMessage2 = 'Producto seleccionada correctamente';
     } catch{
+      errorMessage = true;
       resultMessage2 = 'Fallo seleccion de producto';
     }
   } catch{
+    errorMessage = true;
     resultMessage1 = 'Fallo seleccion de categoria'
   }
 
@@ -57,4 +60,5 @@ const puppeteer = require('puppeteer');
   console.log(resultMessage2);
 
   await browser.close();
+  process.exit(errorMessage ? 1 : 0);
 })();
