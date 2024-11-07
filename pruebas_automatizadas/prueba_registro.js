@@ -22,7 +22,7 @@ const puppeteer = require('puppeteer');
 
   await page.waitForSelector('#Modal_registro'); 
 
-  await page.type('#Direccion_envio', 'Calle, San joaquib'); 
+  await page.type('#Direccion_envio', 'Calle 123, San joaquin'); 
   await page.type('#Email', 'miemail@example.com');
   await page.type('#Contrasena', 'micontraseña'); 
   await page.type('#TryContrasena', 'micontraseña'); 
