@@ -38,7 +38,7 @@ const puppeteer = require('puppeteer');
 
     await page.waitForSelector('#seccion_subastar', { visible: true, timeout: 10000 }); 
 
-    await page.waitForSelector('#rematar_producto', { visible: true, timeout: 10000 }); 
+    await page.waitForSelector('#rematar_producto', { visible: false, timeout: 100000 }); 
     await page.click('#rematar_producto');  
     resultMessage1 = 'Producto subastado correctamente';
 
