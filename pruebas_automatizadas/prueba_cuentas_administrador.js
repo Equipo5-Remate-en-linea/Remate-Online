@@ -6,6 +6,7 @@ const puppeteer = require('puppeteer');
 
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
+  errorMessage = false;
 
   await page.goto('http://localhost:3000/', { waitUntil: 'networkidle2' });
 
@@ -38,6 +39,7 @@ const puppeteer = require('puppeteer');
     resultMessage1 = 'Cambio estado usuario'
 
   } catch (error) {
+    errorMessage = true;
     resultMessage1 = 'Fallo cambio estado usuario ';
     console.error(resultMessage1);
 }
@@ -51,4 +53,5 @@ const puppeteer = require('puppeteer');
   console.log(resultMessage1);
 
   await browser.close();
+  process.exit(errorMessage ? 1 : 0);
 })();
