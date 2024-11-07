@@ -6,6 +6,7 @@ const puppeteer = require('puppeteer');
   
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
+  errorMessage = false;
 
   // Navega a la página de prueba
   await page.goto('http://localhost:3000/', { waitUntil: 'networkidle2' });
@@ -62,6 +63,7 @@ const puppeteer = require('puppeteer');
     resultMessage1 = 'Producto agregado exitosamente'
 
   } catch (error) {
+     errorMessage = true;
     resultMessage1 = 'Fallo al agregar producto ';
     console.error(resultMessage1); 
 }
@@ -75,4 +77,5 @@ const puppeteer = require('puppeteer');
   console.log(resultMessage1);
 
   await browser.close();
+  process.exit(errorMessage ? 1 : 0);
 })();
