@@ -6,7 +6,8 @@ const puppeteer = require('puppeteer');
 
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
-
+  errorMessage = false;
+  
   await page.goto('http://localhost:3000/', { waitUntil: 'networkidle2' });
 
   function getRandomNumber(min, max) {
@@ -23,9 +24,11 @@ const puppeteer = require('puppeteer');
       await page.select('#filtro_precio', 'menor-mayor');
       resultMessage2 = 'Filtro aplicado correctamente';
     } catch{
+      errorMessage = true;
       resultMessage2 = 'Fallo aplicacion filtro';
     }
   } catch{
+    errorMessage = true;
     resultMessage1 = 'Fallo seleccion de categoria'
   }
 
@@ -40,4 +43,5 @@ const puppeteer = require('puppeteer');
   console.log(resultMessage2);
 
   await browser.close();
+  process.exit(errorMessage ? 1 : 0);
 })();
