@@ -36,10 +36,10 @@ const puppeteer = require('puppeteer');
     await page.waitForSelector('#producto_de_prueba_detalles', { visible: true, timeout: 5000 }); 
     await page.click('#producto_de_prueba_detalles');  
 
-    await page.waitForSelector('#seccion_subastar', { visible: true, timeout: 10000 }); 
+    // await page.waitForSelector('#seccion_subastar', { visible: true, timeout: 10000 }); 
 
-    // await page.waitForSelector('#rematar_producto', { visible: tr, timeout: 100000 }); 
-    // await page.click('#rematar_producto');  
+    // // await page.waitForSelector('#rematar_producto', { visible: tr, timeout: 100000 }); 
+    // // await page.click('#rematar_producto');  
     resultMessage1 = 'Producto subastado correctamente';
 
   } catch (error) {
