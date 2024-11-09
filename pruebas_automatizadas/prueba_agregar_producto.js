@@ -14,8 +14,10 @@ const puppeteer = require('puppeteer');
   const { width, height } = await page.viewport();
 
   if (width > 800) {
+    await page.waitForSelector('#Inicio_sesion');
     await page.click('#Inicio_sesion'); 
   } else{
+    await page.waitForSelector('#Menu_hamburguesa');
     await page.click('#Menu_hamburguesa');
     await page.waitForSelector('#Inicio_sesion');
     await page.click('#Inicio_sesion');
