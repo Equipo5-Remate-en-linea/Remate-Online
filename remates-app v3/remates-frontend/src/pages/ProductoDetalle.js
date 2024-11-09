@@ -7,17 +7,57 @@ const token = localStorage.getItem("token");
 console.log("Token obtenido:", token); 
 document.cookie = `token=${token}; path=/;`;
 
+
 function ProductoDetalle() {
   const { id } = useParams();
   const [producto, setProducto] = useState(null);
   const [precioOfertante, setPrecioOfertante] = useState("");
+  const [haOfertado, setHaOfertado] = useState(false);
 
   useEffect(() => {
     fetch(`${endpoints.productos}/${id}`)
       .then((response) => response.json())
       .then((data) => setProducto(data))
       .catch((error) => console.error("Error al obtener el producto:", error));
+
+    // Verificar si el usuario ha ofertado
+    fetch(`${endpoints.productos}/${id}/retirar-oferta`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setHaOfertado(data.haOfertado))
+      .catch((error) => console.error("Error al verificar la oferta:", error));
   }, [id]);
+
+  const handleRetirarOferta = () => {
+    fetch(`${endpoints.productos}/${id}/retirar-oferta`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setProducto(data))
+      .catch((error) => console.error("Error al retirar la oferta:", error));
+  };
+
+  const handleOfertaRetirar = () => {
+    // const token = localStorage.getItem("token"); // Obtener el token de localStorage
+
+    fetch(`${endpoints.productos}/${id}/retirar-oferta`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include", 
+      body: JSON.stringify({ precioOfertante: parseFloat(precioOfertante) }),
+    })
+      .then((response) => response.json())
+      .then((data) => setProducto(data))
+      .catch((error) => console.error("Error al hacer la oferta:", error));
+  };
 
   const handleOferta = () => {
     // const token = localStorage.getItem("token"); // Obtener el token de localStorage
@@ -55,15 +95,16 @@ function ProductoDetalle() {
     {/* Contenedor separado para ofertas */}
     <div className="ofertas-container">
       <h3>Ofertas actuales</h3>
-      {producto.ofertas.length === 0 ? (
+      {producto.ofertas && producto.ofertas.length === 0 ? (
         <p>No hay ofertas, ¡¡¡sé el primero en ofertar por el producto!!!</p>
       ) : (
         <ul>
-          {producto.ofertas
-            .sort((a, b) => b.precioOfertante - a.precioOfertante)
-            .map((oferta, index) => (
-              <li key={index}>Oferta: ${oferta.precioOfertante}</li>
-            ))}
+          {producto.ofertas &&
+            producto.ofertas
+              .sort((a, b) => b.precioOfertante - a.precioOfertante)
+              .map((oferta, index) => (
+                <li key={index}>Oferta: ${oferta.precioOfertante}</li>
+              ))}
         </ul>
       )}
     </div>
@@ -79,9 +120,15 @@ function ProductoDetalle() {
           />
           <button onClick={handleOferta}>Ofertar</button>
         </div>
+
       ) : (
         <button disabled className="boton-gris">No disponible para ofertas</button>
       )}
+      
+      <div className="retirar-oferta">
+        <button onClick={handleOfertaRetirar}>Retirar Oferta</button>
+      </div>
+        
     </div>
     </div>
   );

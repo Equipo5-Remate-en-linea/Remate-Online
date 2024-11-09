@@ -31,12 +31,32 @@ function generarMensajeOfertaMisteriosa(nombre_producto) {
   El equipo.
   `;
 }
+
+function generarMensajeRetirarOferta(nombre_producto) {
+  return `
+  Estimado Administrador,
+
+  Un usuario ha solicitado que se retire su oferta para el producto ${nombre_producto}
+
+  ...
+  `;
+}
+
 function obtenerMail(email, nombre_producto) {
   const msg_registro = generarMensajeOfertaMisteriosa(nombre_producto);
   return {
       from: 'r1nc0nd3l0lv1d0@gmail.com',
       to: email,
       subject: 'Notificación Registro de Cuenta',
+      text: msg_registro,
+  };
+}
+function obtenerMailRetirarOferta(email, nombre_producto) {
+  const msg_registro = generarMensajeRetirarOferta(nombre_producto);
+  return {
+      from: 'r1nc0nd3l0lv1d0@gmail.com',
+      to: email,
+      subject: 'Notificación Retiro de Oferta',
       text: msg_registro,
   };
 }
@@ -53,6 +73,20 @@ function enviarCorreo(email, nombre_producto) {
       }
   });
 }
+
+// Función para enviar correo
+function enviarCorreoRetirarOferta(email, nombre_producto) {
+  let mail = obtenerMailRetirarOferta(email, nombre_producto);
+
+  transporter.sendMail(mail, function(error, info) {
+      if (error) {
+          console.log(error);
+      } else {
+          console.log('Correo enviado: ' + info.response);
+      }
+  });
+}
+
 // Crear producto
 const crearProducto = async (req, res) => {
   const { nombre, precioInicial, descripcion, imagen, duracion, categoria } =
@@ -146,7 +180,31 @@ const agregarOferta = async (req, res) => {
   }
 };
 
+// Ruta en tu controlador de productos
+const RetirarOferta = async (req, res) => {
+  const productoId = req.params.id;
+  const usuarioId = req.user.id; // Asegúrate de que el middleware extrae el usuario
+  console.log("Producto ID:", productoId); // <-- Depuración
+  console.log("Usuario ID:", usuarioId); // <-- Depuración
+  
+
+  try {
+    const producto = await Producto.findById(productoId);
+    const haOfertado = producto.ofertas.some(oferta => oferta.idCuenta.toString() === usuarioId);
+    console.log("Producto ofertas:", producto.ofertas);
+    const nombreProducto = producto.nombre;
+    enviarCorreoRetirarOferta('dale098@gmail.com', nombreProducto);
+
+    res.json({ haOfertado });
+  } catch (error) {
+    console.error("Error al verificar oferta:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
 router.route("/").post(crearProducto).get(obtenerProductos);
 router.route("/:id").get(obtenerProducto).delete(eliminarProducto);
 router.post("/:id/oferta", authenticateToken, agregarOferta);
+router.post("/:id/retirar-oferta", authenticateToken, RetirarOferta);
 module.exports = router;
