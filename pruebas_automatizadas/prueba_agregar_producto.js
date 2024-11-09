@@ -9,7 +9,7 @@ const puppeteer = require('puppeteer');
   errorMessage = false;
 
   // Navega a la página de prueba
-  await page.goto('http://168.61.72.242:3000/', { waitUntil: 'networkidle2' });
+  await page.goto('http:///localhost:3000/', { waitUntil: 'networkidle2' });
 
   const { width, height } = await page.viewport();
 
