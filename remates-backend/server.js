@@ -25,7 +25,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: [
-      "http://localhost:3000",
+      "http://localhost:7000",
       "http://168.61.72.242:3000", 
     ],
     credentials: true,
@@ -139,7 +139,7 @@ cron.schedule('* * * * *', async () => {
 });
 
 // Puerto
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || window.location.hostname === "168.61.72.242" ? 5000 : 6000;
 app.listen(PORT,'0.0.0.0',() => {
   console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
