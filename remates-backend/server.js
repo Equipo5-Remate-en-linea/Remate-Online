@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const path = require("path");
+const os = require('os');
+const hostname = os.hostname();
 
 const rutasProductos = require("./routes/rutasProductos");
 const rutasUsuarios = require("./routes/rutasUsuarios");
@@ -139,7 +141,7 @@ cron.schedule('* * * * *', async () => {
 });
 
 // Puerto
-const PORT = process.env.PORT || window.location.hostname === "168.61.72.242" ? 5000 : 6000;
+const PORT = process.env.PORT || (hostname === '168.61.72.242' ? 5000 : 6000);
 app.listen(PORT,'0.0.0.0',() => {
   console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
