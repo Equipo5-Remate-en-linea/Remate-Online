@@ -141,7 +141,7 @@ cron.schedule('* * * * *', async () => {
 });
 
 // Puerto
-const PORT = (hostname === 'localhost' ? 6000 : 6000);
+const PORT = (hostname === 'localhost' ? 5000 : 5000);
 app.listen(PORT,'0.0.0.0',() => {
   console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
