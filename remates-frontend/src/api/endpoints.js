@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:5000";
+const baseUrl = "http://168.61.72.242:5000";
 
 const endpoints = {
   productos: baseUrl + "/productos",
