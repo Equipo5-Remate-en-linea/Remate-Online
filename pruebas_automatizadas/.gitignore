@@ -5,7 +5,7 @@
 /.pnp
 .pnp.js
 .env
-.prueba_iniciar_subasta_producto.js
+prueba_iniciar_subasta_producto.js
 
 # testing
 /coverage
