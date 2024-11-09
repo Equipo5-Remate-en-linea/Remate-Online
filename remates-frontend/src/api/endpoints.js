@@ -1,8 +1,8 @@
-const localUrl = "http://localhost:5000";
+//const localUrl = "http://localhost:5000";
 const productionUrl = "http://168.61.72.242:5000";
 
-const baseUrl = window.location.hostname === "localhost" ? localUrl : productionUrl;
-
+//const baseUrl = window.location.hostname === "localhost" ? localUrl : productionUrl;
+const baseUrl = productionUrl;
 const endpoints = {
   productos: baseUrl + "/productos",
   usuarios: baseUrl + "/usuarios",
