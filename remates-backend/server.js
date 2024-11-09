@@ -24,7 +24,10 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://168.61.72.242:3000", // Cambia esto al origen correcto de tu frontend
+    origin: [
+      "http://localhost:3000",
+      "http://168.61.72.242:3000", 
+    ],
     credentials: true,
   })
 );
@@ -137,6 +140,6 @@ cron.schedule('* * * * *', async () => {
 
 // Puerto
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+app.listen(PORT,'0.0.0.0',() => {
   console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
