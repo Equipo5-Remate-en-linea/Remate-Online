@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import endpoints from "../api/endpoints";
-import ProductAdmin from "../components/ProductAdmin";
+import endpoints from "../../api/endpoints";
+import ProductAdmin from "../../components/ProductAdmin";
 
 export default function AdministracionProductos() {
   const [products, setProducts] = useState([]);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
-  const [added, setAdded] = useState(false)
+  const [added, setAdded] = useState(false);
   const [searchParams] = useSearchParams();
 
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ export default function AdministracionProductos() {
 
   // setear si se creo un producto
   useEffect(() => {
-    if (searchParams.get("added") === '1') {
+    if (searchParams.get("added") === "1") {
       setAdded(true);
       setTimeout(() => {
         setAdded(false);

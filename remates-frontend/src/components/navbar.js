@@ -29,11 +29,15 @@ function NavbarCustom() {
     navigate("/administracion/cuentas");
   };
 
+  const PaginaAdministracionLogs = () => {
+    navigate("/administracion/logs");
+  };
+
   useEffect(() => {
     console.log(getCookieValue("token"));
     if (getCookieValue("token") !== null) {
       setInicioExitoso(true);
-    } else{
+    } else {
       setInicioExitoso(false);
     }
     console.log("El componente se ha cargado");
@@ -54,16 +58,16 @@ function NavbarCustom() {
 
   const getCookieValue = (name) => {
     // Obtener todas las cookies
-    const cookies = document.cookie.split('; '); 
+    const cookies = document.cookie.split("; ");
     // Buscar la cookie específica
     for (let cookie of cookies) {
       // Separar el nombre y el valor
-      const [key, value] = cookie.split('=');
+      const [key, value] = cookie.split("=");
       // Si encontramos la cookie, devolvemos el valor (incluyendo 'null' como string)
       if (key === name) {
-        if(value === "null"){
+        if (value === "null") {
           return null;
-        } else{
+        } else {
           return true;
         }
       }
@@ -140,6 +144,15 @@ function NavbarCustom() {
                     Cuentas
                   </Nav.Link>
                 )}
+                {usuarioAdministrador && (
+                  <Nav.Link
+                    id="logs"
+                    className="color-letra linea-bajo-texto"
+                    onClick={PaginaAdministracionLogs}
+                  >
+                    Logs
+                  </Nav.Link>
+                )}
                 <Nav.Link
                   className="color-letra linea-bajo-texto"
                   onClick={BorrarCookie}
@@ -179,4 +192,3 @@ function NavbarCustom() {
 }
 
 export default NavbarCustom;
-

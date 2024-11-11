@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import Disponibilidad from "../components/Disponibilidad";
-import endpoints from "../api/endpoints";
-import { formatQuantity, displayDate } from "../helpers";
+import Disponibilidad from "../../components/Disponibilidad";
+import endpoints from "../../api/endpoints";
+import { formatQuantity, displayDate } from "../../helpers";
 
 export default function AdministracionProductosDetalle() {
   const [product, setProduct] = useState({});
@@ -61,7 +61,7 @@ export default function AdministracionProductosDetalle() {
 
   // setear si se edito el producto
   useEffect(() => {
-    if (searchParams.get("edited") === '1') {
+    if (searchParams.get("edited") === "1") {
       setEdited(true);
       setTimeout(() => {
         setEdited(false);
@@ -122,7 +122,10 @@ export default function AdministracionProductosDetalle() {
         </p>
         {/* botones */}
         {product.disponibilidad === "no disponible" ? (
-          <div id='seccion_subastar' className="flex flex-col-reverse gap-3 md:grid md:grid-cols-2">
+          <div
+            id="seccion_subastar"
+            className="flex flex-col-reverse gap-3 md:grid md:grid-cols-2"
+          >
             <button
               id="rematar_producto"
               className="color-boton text-white px-4 py-2 rounded-sm transition"
