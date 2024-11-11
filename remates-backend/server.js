@@ -131,7 +131,6 @@ cron.schedule('* * * * *', async () => {
           }
         }
       }
-      // Cambia el estado del producto para que no siga disponible
       producto.disponibilidad = 'no disponible';
       await producto.save();
     });

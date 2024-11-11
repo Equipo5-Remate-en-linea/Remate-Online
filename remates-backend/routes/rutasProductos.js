@@ -6,6 +6,7 @@ const router = express.Router();
 const authenticateToken = require("../middleware/authenticateToken");
 const Producto = require("../models/Producto");
 const upload = require("../middleware/createProductMiddleware");
+const Usuario = require("../models/Usuarios");
 
 const nodemailer = require('nodemailer');
 
@@ -13,8 +14,8 @@ const nodemailer = require('nodemailer');
 let transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-      user: 'r1nc0nd3l0lv1d0@gmail.com', // Tu correo electrónico
-      pass: 'urno wlrt mieh hqif',      // Tu contraseña o un App Password si tienes 2FA activado
+      user: 'r1nc0nd3l0lv1d0@gmail.com', //correo electrónico
+      pass: 'urno wlrt mieh hqif',      
   },
 });
 
@@ -33,6 +34,28 @@ function generarMensajeOfertaMisteriosa(nombre_producto) {
   El equipo.
   `;
 }
+
+function generarMensajeRetirarOferta(nombre_producto) {
+  return `
+  Estimado Administrador,
+
+  Un usuario ha solicitado que se retire su oferta para el producto ${nombre_producto}
+
+  ...
+  `;
+}
+
+function retirarOfertaMensaje(nombre_producto) {
+  return `
+  Estimado Usuario,
+
+  se ha retirado su oferta para el producto ${nombre_producto} exitosamente, le invitamos a participar en otros productos.
+  
+  El equipo.
+  ...
+  `;
+}
+
 function obtenerMail(email, nombre_producto) {
   const msg_registro = generarMensajeOfertaMisteriosa(nombre_producto);
   return {
@@ -43,8 +66,31 @@ function obtenerMail(email, nombre_producto) {
   };
 }
 
+function obtenerMail2(email, nombre_producto) {
+  const msg_registro = retirarOfertaMensaje(nombre_producto);
+  return {
+      from: 'r1nc0nd3l0lv1d0@gmail.com',
+      to: email,
+      subject: 'Notificación Registro de Cuenta',
+      text: msg_registro,
+  };
+}
+
 // Función para enviar correo
 function enviarCorreo(email, nombre_producto) {
+  let mail = obtenerMail(email, nombre_producto);
+
+  transporter.sendMail(mail, function(error, info) {
+      if (error) {
+          console.log(error);
+      } else {
+          console.log('Correo enviado: ' + info.response);
+      }
+  });
+}
+
+// Función para enviar correo
+function enviarCorreo2(email, nombre_producto) {
   let mail = obtenerMail(email, nombre_producto);
 
   transporter.sendMail(mail, function(error, info) {
@@ -89,6 +135,18 @@ const obtenerProductos = async (req, res) => {
     // Obtener productos con o sin filtro de categoría
     const productos = await Producto.find(filtro);
     const ahora = new Date();
+
+    // Actualizar la disponibilidad de los productos
+    productos.forEach(async (producto) => {
+      if (
+        producto.expiracion < ahora &&
+        producto.disponibilidad === "disponible"
+      ) {
+        producto.disponibilidad = "no disponible";
+        await producto.save(); // Guardar el cambio en la base de datos
+      }
+    });
+
     res.status(200).json(productos);
   } catch (error) {
     res.status(500).json({ error: "Error al obtener productos" });
@@ -160,6 +218,7 @@ const eliminarImagen = async (productId) => {
     return -1; // error
   }
 };
+
 const eliminarProducto = async (req, res) => {
   const productId = req.params.id;
   try {
@@ -189,6 +248,7 @@ const agregarOferta = async (req, res) => {
     const idCuenta = req.user.id; // ID del usuario (obtenido del token)
 
     const producto = await Producto.findById(id);
+    const usuario = await Usuario.findById(idCuenta);
 
     if (!producto || producto.disponibilidad !== "disponible") {
       return res.status(400).send("El producto no está disponible para ofertas");
@@ -211,14 +271,36 @@ const agregarOferta = async (req, res) => {
   }
 };
 
+const RetirarOferta = async (req, res) => {
+  const productoId = req.params.id;
+  
+  // En lugar de usar req.user, vamos a obtener el id y el rol del usuario directamente de algún lugar
+  // Por ejemplo, si lo estás pasando como parámetros o en el body de la solicitud.
+  const usuarioId = req.body.usuarioId;  // Suponiendo que pasas el ID de usuario en el body
+  const esAdmin = req.body.esAdmin;      // Suponiendo que pasas el rol admin en el body
+  const email = req.body.email;
+
+  try {
+    const producto = await Producto.findById(productoId);
+    if (esAdmin) {
+      // Si es admin, eliminamos la oferta mayor
+      producto.ofertas.shift();  // Eliminar la oferta mayor
+      await producto.save();
+      return res.json({ success: "Oferta eliminada exitosamente", producto });
+    } else {
+      // Si no es admin, solo enviar correo
+      const nombreProducto = producto.nombre;
+      enviarCorreoRetirarOferta('correo_usuario@ejemplo.com', nombreProducto);  // Cambiar a correo del usuario
+      return res.json({ success: "Correo de retiro de oferta enviado" });
+    }
+  } catch (error) {
+    console.error("Error al procesar la retirada de oferta:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
 router.post("/:id/oferta", authenticateToken, agregarOferta);
-router
-  .route("/")
-  .post(upload.single("imagen"), crearProducto)
-  .get(obtenerProductos);
-router
-  .route("/:id")
-  .get(obtenerProducto)
-  .put(upload.single("imagen"), actualizarProducto)
-  .delete(eliminarProducto);
+router.post("/:id/retirar-oferta", RetirarOferta);
+router.route("/").post(upload.single("imagen"), crearProducto).get(obtenerProductos);
+router.route("/:id").get(obtenerProducto).put(upload.single("imagen"), actualizarProducto).delete(eliminarProducto);
 module.exports = router;

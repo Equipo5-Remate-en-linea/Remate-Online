@@ -76,31 +76,63 @@
     border-bottom: none;
   }
   
-  /* Contenedor separado para el formulario de oferta */
-  .ofertar-container {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-  }
-  
-  .ofertar {
-    background-color: rgb(150, 204, 150);
-    display: center;
-    gap: 10px;
-  }
-  
-  .ofertar input {
-    padding: 10px;
-    font-size: 16px;
-  }
-  
-  .ofertar button, .boton-gris {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .boton-gris {
-    background-color: grey;
-    cursor: not-allowed;
-  }
+/* Contenedor principal para la oferta y botones de retiro */
+.ofertar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Alinea verticalmente */
+  gap: 10px; /* Espacio entre los elementos */
+}
+
+/* Contenedor de la oferta */
+.ofertar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Estilo para el campo de input de oferta */
+.ofertar input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Estilo compartido para todos los botones */
+.ofertar button, .boton-gris, .boton-retirar {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Botón de ofertar */
+.ofertar button {
+  background-color: rgb(150, 204, 150);
+  border: none;
+  color: white;
+}
+
+/* Botón gris deshabilitado */
+.boton-gris {
+  background-color: grey;
+  color: white;
+  cursor: not-allowed;
+  border: none;
+}
+
+/* Botón de retirar oferta */
+.boton-retirar {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.boton-retirar:hover {
+  background-color: #f5c6cb;
+}
+
