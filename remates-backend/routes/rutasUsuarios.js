@@ -1,20 +1,21 @@
+// librerias
 const express = require("express");
-const bcrypt = require('bcryptjs');
-
+const bcrypt = require("bcryptjs");
+const nodemailer = require("nodemailer");
+// modulos
+const Usuario = require("../models/Usuarios");
+const Log = require("../models/Log");
+const authenticateToken = require("../middleware/authenticateToken");
+const { addLog } = require("../helpers");
 
 const router = express.Router();
 
-const Usuario = require("../models/Usuarios");
-const authenticateToken = require("../middleware/authenticateToken");
-
-const nodemailer = require('nodemailer');
-
 // Configuración del transporte
 let transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   auth: {
-      user: 'r1nc0nd3l0lv1d0@gmail.com', // Tu correo electrónico
-      pass: 'urno wlrt mieh hqif',      // Tu contraseña o un App Password si tienes 2FA activado
+    user: "r1nc0nd3l0lv1d0@gmail.com", // Tu correo electrónico
+    pass: "urno wlrt mieh hqif", // Tu contraseña o un App Password si tienes 2FA activado
   },
 });
 
@@ -36,10 +37,10 @@ function generarMensajeRegistroMisterioso() {
 function obtenerMail(email) {
   const msg_registro = generarMensajeRegistroMisterioso();
   return {
-      from: 'r1nc0nd3l0lv1d0@gmail.com',
-      to: email,
-      subject: 'Notificación Registro de Cuenta',
-      text: msg_registro,
+    from: "r1nc0nd3l0lv1d0@gmail.com",
+    to: email,
+    subject: "Notificación Registro de Cuenta",
+    text: msg_registro,
   };
 }
 
@@ -47,12 +48,12 @@ function obtenerMail(email) {
 function enviarCorreo(email) {
   let mail = obtenerMail(email);
 
-  transporter.sendMail(mail, function(error, info) {
-      if (error) {
-          console.log(error);
-      } else {
-          console.log('Correo enviado: ' + info.response);
-      }
+  transporter.sendMail(mail, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Correo enviado: " + info.response);
+    }
   });
 }
 
@@ -72,6 +73,7 @@ const crearUsuario = async (req, res) => {
   enviarCorreo(email);
   await nuevoUsuario.save();
   res.status(201).send(nuevoUsuario);
+  addLog(`Nuevo usuario registrado con el email: ${email}.`);
 };
 
 // Obtener todos los usuarios
@@ -118,6 +120,11 @@ const actualizarUsuario = async (req, res) => {
 
     // Guarda los cambios en la base de datos
     await usuario.save();
+
+    const descripcion = `Se ha ${
+      usuario.administrador ? "asignado" : "quitado"
+    } el rol de administrador al usuario con email: ${usuario.email}.`;
+    addLog(descripcion);
 
     // res.json(usuarioActualizado); // Devuelve el usuario actualizado
   } catch (error) {

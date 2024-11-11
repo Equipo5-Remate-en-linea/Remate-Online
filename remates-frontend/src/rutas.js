@@ -4,9 +4,10 @@ import Inicio from "./pages/Inicio";
 // import Home from './Home';
 import NavbarCustom from "./components/navbar";
 import ProductoDetalle from "./pages/ProductoDetalle";
-import AdministracionProductos from "./pages/AdministracionProductos";
-import AdministracionCuentas from "./pages/AdministracionCuentas";
-import AdministracionProductosDetalle from "./pages/AdministracionProductosDetalle";
+import AdministracionLogs from "./pages/admin/AdministracionLogs";
+import AdministracionProductos from "./pages/admin/AdministracionProductos";
+import AdministracionCuentas from "./pages/admin/AdministracionCuentas";
+import AdministracionProductosDetalle from "./pages/admin/AdministracionProductosDetalle";
 import AgregarProducto from "./pages/AgregarProducto";
 import EditarProducto from "./pages/EditarProducto";
 
@@ -18,6 +19,7 @@ function Rutas() {
         <Route path="/" element={<Inicio />} />
         {/* Nueva ruta para detalles del producto */}
         <Route path="/producto/:id" element={<ProductoDetalle />} />
+        <Route path="/administracion/logs" element={<AdministracionLogs />} />
         <Route
           path="/administracion/productos"
           element={<AdministracionProductos />}

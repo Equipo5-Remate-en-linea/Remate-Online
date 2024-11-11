@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
-import "../assets/cuenta_administrador.css";
-import endpoints from "../api/endpoints";
+import "../../assets/cuenta_administrador.css";
+import endpoints from "../../api/endpoints";
 
 function AdministracionCuentas() {
   const [usuarios, setUsuarios] = useState([]);
