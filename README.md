@@ -3,6 +3,9 @@
 Aplicación web de remates en línea.
 
 ---
+## Video
+
+Enlace para el video de la Entrega 2: [Link](https://youtu.be/7M_-3mWZi80)
 
 ## Pre-requisitos
 
