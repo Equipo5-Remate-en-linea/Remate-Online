@@ -17,6 +17,7 @@ real. El sistema está compuesto por un front-end con React, un back-end basado 
 - **React** depende de **NodeJS** para servir la aplicación y manejar las solicitudes de datos (productos, usuarios, etc.).
 - **NodeJS** interactúa con **MongoDB** para almacenar y recuperar información relacionada con los productos en remate y los usuarios.
 - **Puppeteer** se utiliza para ejecutar pruebas automatizadas, mas especificamente pruebas de sistemas, para verificar el correcto funcionamiento de la aplicación. Se almaceno resultado en un txt
+- **Jenkins** se utiliza para supervisar el proceso de integración continua de la aplicación. Esta ligado a slack para notificar el estado y a jira para ligar tareas.
 
 ## Procedimiento de ejecución de pruebas
 
@@ -158,7 +159,10 @@ Comentarios adiconales: Mayor retroalimentación en prueba.
 - Todas las pruebas de sistema fueron exitosas.
 - No se detectaron problemas graves, solo el problema de diseño entre categoria y productos.
 
+# Uso de jenkins
+
+Para utilizar jenkins se debe acceder a la maquina virtual y ejecutar el comando "java -jar jenkins.war --enable-future-java". Al hacerlo se puede acceder al panel de control de jenkins, con la siguiente url: http://168.61.72.242:8080/ y aqui esta condigurado un pipeline con el git del proyecto 'Remate en linea' donde se puede probar, ademas esta configurado, para ejecutarse cada vez que se suba cambios a la rama 'Code-Base'.
+
 # Problemas encontrados y soluciones
 
-- **Problema**: Diseño de categoria y producto puede causar problema con la interacción del usuario.
-  - **Solución**: Se juntara la categoria en la misma seccion que los productos, por implementar.
+No se encontraron problemas.
