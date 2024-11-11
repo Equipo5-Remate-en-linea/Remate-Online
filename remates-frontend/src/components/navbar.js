@@ -96,7 +96,7 @@ function NavbarCustom() {
         throw new Error("Error al obtener datos del usuario");
       }
 
-      const data = await response.text(); // O usa .json() si devuelves un objeto JSON
+      const data = await response.json(); // O usa .json() si devuelves un objeto JSON
       setusuarioAdministrador(data); // Muestra la respuesta en la consola
     } catch (error) {
       console.error("Error:", error);
