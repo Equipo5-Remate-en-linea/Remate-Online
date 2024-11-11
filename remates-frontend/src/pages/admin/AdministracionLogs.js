@@ -25,16 +25,16 @@ export default function AdministracionLogs() {
       {logs.length === 0 ? (
         <p className="text-xl text-center">No hay logs registrados</p>
       ) : (
-        <table className="w-full table-auto border-collapse border border-slate-700">
+        <table className="w-3/4 table-auto border-collapse border border-slate-700 mx-auto">
           <thead>
             <tr className="border-b">
-              <th className="px-4 py-2">Fecha</th>
-              <th className="px-4 py-2">Descripción</th>
+              <th className="w-2/5 px-4 py-2">Fecha</th>
+              <th className="w-3/5 px-4 py-2">Descripción</th>
             </tr>
           </thead>
           <tbody>
             {logs.map((log) => (
-              <LogTableRow />
+              <LogTableRow key={log._id} log={log} />
             ))}
           </tbody>
         </table>

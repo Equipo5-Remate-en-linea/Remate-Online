@@ -1,4 +1,4 @@
-// Importaciones necesarias
+// Librerias
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -6,16 +6,19 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 const os = require("os");
 const hostname = os.hostname();
-
+const cron = require("node-cron"); // Importa node-cron
+const nodemailer = require("nodemailer"); // Importa nodemailer
+// rutas
 const rutasProductos = require("./routes/rutasProductos");
 const rutasUsuarios = require("./routes/rutasUsuarios");
 const rutasAutenticacion = require("./routes/rutasAutenticacion");
 const rutasCategorias = require("./routes/rutasCategorias");
 const rutasLogs = require("./routes/rutasLogs");
-const cron = require("node-cron"); // Importa node-cron
-const nodemailer = require("nodemailer"); // Importa nodemailer
+// models
 const Producto = require("./models/Producto"); // Modelo Producto
 const Usuario = require("./models/Usuarios"); // Modelo Usuario
+// funciones
+const { obtenerOfertaMasAlta, formatQuantity, addLog } = require("./helpers");
 
 require("dotenv").config();
 process.env.JWT_SECRET =
@@ -119,12 +122,10 @@ cron.schedule("* * * * *", async () => {
     });
 
     productosExpirados.forEach(async (producto) => {
+      let descripcion = `El remate del producto "${producto.nombre}" ha finalizado con ${producto.ofertas.length} ofertas.`;
       // Verifica si hay ofertas
       if (producto.ofertas.length > 0) {
-        // Ordena las ofertas y obtiene la más alta
-        const ofertaGanadora = producto.ofertas.sort(
-          (a, b) => b.precioOfertante - a.precioOfertante
-        )[0];
+        const ofertaGanadora = obtenerOfertaMasAlta(producto.ofertas);
 
         if (ofertaGanadora) {
           // Busca el usuario ganador en la base de datos
@@ -135,6 +136,11 @@ cron.schedule("* * * * *", async () => {
           if (usuarioGanador) {
             // Envía el correo de notificación
             await enviarCorreoGanador(usuarioGanador.email, producto);
+            // LOG
+            descripcion += ` La oferta más alta fue de ${formatQuantity(
+              ofertaGanadora
+            )}, realizada por el usuario: ${usuarioGanador.email}.`;
+            addLog(descripcion);
           }
         }
       }

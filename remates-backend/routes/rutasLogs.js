@@ -22,7 +22,7 @@ const crearLog = async (req, res) => {
 // Obtener logs
 const obtenerLogs = async (req, res) => {
   try {
-    const logs = await Log.find();
+    const logs = await Log.find().sort({ realizadoEn: -1 });
     res.status(200).send(logs);
   } catch (error) {
     console.log(error);

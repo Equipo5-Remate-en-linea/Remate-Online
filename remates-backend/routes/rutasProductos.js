@@ -1,21 +1,26 @@
+// librerias
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
+const nodemailer = require("nodemailer");
+// models
+const Producto = require("../models/Producto");
+const Usuario = require("../models/Usuarios");
+const Log = require("../models/Log");
+// middlewares
+const authenticateToken = require("../middleware/authenticateToken");
+const upload = require("../middleware/createProductMiddleware");
+// funciones
+const { formatQuantity, addLog } = require("../helpers");
 
 const router = express.Router();
-const authenticateToken = require("../middleware/authenticateToken");
-const Producto = require("../models/Producto");
-const upload = require("../middleware/createProductMiddleware");
-const Usuario = require("../models/Usuarios");
-
-const nodemailer = require('nodemailer');
 
 // Configuración del transporte
 let transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   auth: {
-      user: 'r1nc0nd3l0lv1d0@gmail.com', //correo electrónico
-      pass: 'urno wlrt mieh hqif',      
+    user: "r1nc0nd3l0lv1d0@gmail.com", //correo electrónico
+    pass: "urno wlrt mieh hqif",
   },
 });
 
@@ -59,20 +64,20 @@ function retirarOfertaMensaje(nombre_producto) {
 function obtenerMail(email, nombre_producto) {
   const msg_registro = generarMensajeOfertaMisteriosa(nombre_producto);
   return {
-      from: 'r1nc0nd3l0lv1d0@gmail.com',
-      to: email,
-      subject: 'Notificación Registro de Cuenta',
-      text: msg_registro,
+    from: "r1nc0nd3l0lv1d0@gmail.com",
+    to: email,
+    subject: "Notificación Registro de Cuenta",
+    text: msg_registro,
   };
 }
 
 function obtenerMail2(email, nombre_producto) {
   const msg_registro = retirarOfertaMensaje(nombre_producto);
   return {
-      from: 'r1nc0nd3l0lv1d0@gmail.com',
-      to: email,
-      subject: 'Notificación Registro de Cuenta',
-      text: msg_registro,
+    from: "r1nc0nd3l0lv1d0@gmail.com",
+    to: email,
+    subject: "Notificación Registro de Cuenta",
+    text: msg_registro,
   };
 }
 
@@ -80,12 +85,12 @@ function obtenerMail2(email, nombre_producto) {
 function enviarCorreo(email, nombre_producto) {
   let mail = obtenerMail(email, nombre_producto);
 
-  transporter.sendMail(mail, function(error, info) {
-      if (error) {
-          console.log(error);
-      } else {
-          console.log('Correo enviado: ' + info.response);
-      }
+  transporter.sendMail(mail, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Correo enviado: " + info.response);
+    }
   });
 }
 
@@ -93,12 +98,12 @@ function enviarCorreo(email, nombre_producto) {
 function enviarCorreo2(email, nombre_producto) {
   let mail = obtenerMail(email, nombre_producto);
 
-  transporter.sendMail(mail, function(error, info) {
-      if (error) {
-          console.log(error);
-      } else {
-          console.log('Correo enviado: ' + info.response);
-      }
+  transporter.sendMail(mail, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Correo enviado: " + info.response);
+    }
   });
 }
 
@@ -117,6 +122,7 @@ const crearProducto = async (req, res) => {
       categoria,
     });
     await nuevoProducto.save();
+    addLog(`Se ha creado el producto: ${nombre}.`);
     res.status(201).send(nuevoProducto);
   } catch (error) {
     console.log(error);
@@ -173,27 +179,62 @@ const actualizarProducto = async (req, res) => {
     const product = await Producto.findById(id);
     if (!product)
       return res.status(400).send({ message: "El producto no existe" });
-    product.nombre = req.body.nombre || product.nombre;
-    product.descripcion = req.body.descripcion || product.descripcion;
-    product.precioInicial = req.body.precioInicial || product.precioInicial;
-    product.duracion = req.body.duracion || product.duracion;
-    product.categoria = req.body.categoria || product.categoria;
+    const camposActualizados = [];
+    if (req.body.nombre) {
+      product.nombre = req.body.nombre;
+      camposActualizados.push("nombre");
+    }
+    if (req.body.descripcion) {
+      product.descripcion = req.body.descripcion;
+      camposActualizados.push("descripcion");
+    }
+    if (req.body.precioInicial) {
+      product.precioInicial = req.body.precioInicial;
+      camposActualizados.push("precio inicial");
+    }
+    if (req.body.duracion) {
+      product.duracion = req.body.duracion;
+      camposActualizados.push("duracion");
+    }
+    if (req.body.categoria) {
+      product.categoria = req.body.categoria;
+      camposActualizados.push("categoria");
+    }
     if (req.body.disponibilidad === "disponible") {
       product.disponibilidad = req.body.disponibilidad;
       const diaExpiracion = new Date();
-      diaExpiracion.setDate(diaExpiracion.getDate() + product.duracion);
+      diaExpiracion.setDate(diaExpiracion.getDate() - 1 + product.duracion);
       product.expiracion = diaExpiracion;
+      camposActualizados.push("disponibilidad");
     }
 
     if (req.file) {
       const deleteImageFlag = await eliminarImagen(id);
-      if (deleteImageFlag >= 0) product.imagen = req.file.filename;
-      else
+      if (deleteImageFlag >= 0) {
+        product.imagen = req.file.filename;
+        camposActualizados.push("imagen");
+      } else
         return res.status(500).send({
           message: "Ha ocurrido un error al eliminar la imagen antigua",
         });
     }
     await product.save();
+    let descripcion = "";
+    const totalCamposActualizados = camposActualizados.length;
+    if (totalCamposActualizados === 1)
+      descripcion += `Se ha actualizado el campo ${camposActualizados[0]} del producto: ${product.nombre}.`;
+    else if (totalCamposActualizados > 1) {
+      descripcion += "Se han actualiado los campos ";
+      for (let i = 0; i < totalCamposActualizados; i++) {
+        if (i < totalCamposActualizados - 2)
+          descripcion += `${camposActualizados[i]}, `;
+        else if (i == totalCamposActualizados - 2)
+          descripcion += `${camposActualizados[i]} y `;
+        else descripcion += camposActualizados[i] + " ";
+      }
+      descripcion += `del producto: ${product.nombre}.`;
+    }
+    addLog(descripcion);
     res.status(200).send(product);
   } catch (error) {
     console.error(error);
@@ -224,7 +265,9 @@ const eliminarProducto = async (req, res) => {
   try {
     const deleteImageFlag = await eliminarImagen(productId);
     if (deleteImageFlag === 1) {
+      const product = await Producto.findById(productId);
       await Producto.findByIdAndDelete(productId);
+      addLog(`Se ha eliminado el producto: ${product.nombre}.`);
       res.status(204).send();
     } else if (deleteImageFlag === 0)
       return res.status(400).send({ message: "La imagen no existe" });
@@ -251,12 +294,14 @@ const agregarOferta = async (req, res) => {
     const usuario = await Usuario.findById(idCuenta);
 
     if (!producto || producto.disponibilidad !== "disponible") {
-      return res.status(400).send("El producto no está disponible para ofertas");
+      return res
+        .status(400)
+        .send("El producto no está disponible para ofertas");
     }
 
     const nombreProducto = producto.nombre;
     const email = usuario.email;
-    
+
     enviarCorreo(email, nombreProducto);
 
     // Agregar la nueva oferta
@@ -265,6 +310,11 @@ const agregarOferta = async (req, res) => {
     producto.ofertas.sort((a, b) => b.precioOfertante - a.precioOfertante);
 
     await producto.save();
+    const descripcion = `El usuario con email "${email}" ha hecho una puja de ${formatQuantity(
+      precioOfertante
+    )} por el producto: ${producto.nombre}.`;
+    const newLog = new Log({ descripcion });
+    await newLog.save();
     res.status(200).send(producto);
   } catch (error) {
     res.status(500).send("Error al agregar la oferta");
@@ -273,24 +323,30 @@ const agregarOferta = async (req, res) => {
 
 const RetirarOferta = async (req, res) => {
   const productoId = req.params.id;
-  
+
   // En lugar de usar req.user, vamos a obtener el id y el rol del usuario directamente de algún lugar
   // Por ejemplo, si lo estás pasando como parámetros o en el body de la solicitud.
-  const usuarioId = req.body.usuarioId;  // Suponiendo que pasas el ID de usuario en el body
-  const esAdmin = req.body.esAdmin;      // Suponiendo que pasas el rol admin en el body
+  const usuarioId = req.body.usuarioId; // Suponiendo que pasas el ID de usuario en el body
+  const esAdmin = req.body.esAdmin; // Suponiendo que pasas el rol admin en el body
   const email = req.body.email;
 
   try {
     const producto = await Producto.findById(productoId);
     if (esAdmin) {
       // Si es admin, eliminamos la oferta mayor
-      producto.ofertas.shift();  // Eliminar la oferta mayor
+      producto.ofertas.shift(); // Eliminar la oferta mayor
       await producto.save();
+      addLog(
+        `El administrador con email "${email}" ha retirado la última puja del producto: ${producto.nombre}.`
+      );
       return res.json({ success: "Oferta eliminada exitosamente", producto });
     } else {
       // Si no es admin, solo enviar correo
       const nombreProducto = producto.nombre;
-      enviarCorreoRetirarOferta('correo_usuario@ejemplo.com', nombreProducto);  // Cambiar a correo del usuario
+      enviarCorreoRetirarOferta("correo_usuario@ejemplo.com", nombreProducto); // Cambiar a correo del usuario
+      addLog(
+        `El usuario con email "${email}" ha solicitado retirar su oferta por el producto: ${producto.nombre}.`
+      );
       return res.json({ success: "Correo de retiro de oferta enviado" });
     }
   } catch (error) {
@@ -301,6 +357,13 @@ const RetirarOferta = async (req, res) => {
 
 router.post("/:id/oferta", authenticateToken, agregarOferta);
 router.post("/:id/retirar-oferta", RetirarOferta);
-router.route("/").post(upload.single("imagen"), crearProducto).get(obtenerProductos);
-router.route("/:id").get(obtenerProducto).put(upload.single("imagen"), actualizarProducto).delete(eliminarProducto);
+router
+  .route("/")
+  .post(upload.single("imagen"), crearProducto)
+  .get(obtenerProductos);
+router
+  .route("/:id")
+  .get(obtenerProducto)
+  .put(upload.single("imagen"), actualizarProducto)
+  .delete(eliminarProducto);
 module.exports = router;
