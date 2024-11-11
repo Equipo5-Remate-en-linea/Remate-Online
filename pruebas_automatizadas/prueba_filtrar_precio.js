@@ -16,8 +16,8 @@ const puppeteer = require('puppeteer');
   
   
   try{
-    let randomNumber = getRandomNumber(0, 3); 
-    await page.click('#categoria_'+randomNumber);
+    //let randomNumber = getRandomNumber(0, 3); 
+    //await page.click('#categoria_'+randomNumber);
     resultMessage1 = 'Categoria seleccionada correctamente';
 
     try{
@@ -29,7 +29,8 @@ const puppeteer = require('puppeteer');
     }
   } catch{
     errorMessage = true;
-    resultMessage1 = 'Fallo seleccion de categoria'
+    resultMessage1 = 'Fallo seleccion de categoria';
+    resultMessage2 = '';
   }
 
   const scriptName = path.basename(__filename, '.js');
