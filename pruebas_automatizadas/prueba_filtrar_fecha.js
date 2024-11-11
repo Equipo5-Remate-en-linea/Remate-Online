@@ -17,8 +17,8 @@ const puppeteer = require('puppeteer');
   
   
   try{
-    #let randomNumber = getRandomNumber(0, 3); 
-    #await page.click('#categoria_'+randomNumber);
+    //let randomNumber = getRandomNumber(0, 3); 
+    //await page.click('#categoria_'+randomNumber);
     resultMessage1 = 'Categoria seleccionada correctamente';
 
     try{
