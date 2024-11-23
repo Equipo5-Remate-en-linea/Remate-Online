@@ -5,7 +5,5 @@ const { Builder, By, Browser } = require('selenium-webdriver');
 
   await driver.get('http://localhost:3000');
   await driver.quit();
-  r
-2
 })();
 
