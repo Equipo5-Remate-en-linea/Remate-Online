@@ -143,9 +143,9 @@ function ProductoDetalle() {
       <div className="ofertas-container">
         <h3>Oferta más alta</h3>
         {ofertaMaxima === producto.precioInicial ? (
-          <p>No hay ofertas, ¡sé el primero en ofertar por el producto!</p>
+          <p >No hay ofertas, ¡sé el primero en ofertar por el producto!</p>
         ) : (
-          <p>Oferta más alta: ${ofertaMaxima}</p>
+          <p id="oferta_maxima">Oferta más alta: ${ofertaMaxima}</p>
         )}
       </div>
 
@@ -154,12 +154,13 @@ function ProductoDetalle() {
         {producto.disponibilidad === "disponible" ? (
           <div className="ofertar">
             <input
+              id="Oferta_input"
               type="number"
               value={precioOfertante}
               onChange={(e) => setPrecioOfertante(e.target.value)}
               placeholder="Introduce tu oferta"
             />
-            <button onClick={handleOferta}>Ofertar</button>
+            <button id = "Ofertar_boton" onClick={handleOferta}>Ofertar</button>
           </div>
         ) : (
           <button disabled className="boton-gris">No disponible para ofertas</button>
@@ -167,14 +168,14 @@ function ProductoDetalle() {
         <div className="ofertar-container">
           {/* Mostrar el botón de "Retirar oferta" si es admin */}
           {esAdmin && (
-            <button onClick={handleRetirarOferta} className="boton-retirar">
+            <button id = "retirar_oferta" onClick={handleRetirarOferta} className="boton-retirar">
               Retirar oferta
             </button>
           )}
           
           {/* Mostrar el botón de "Retirar mi oferta" si no es admin pero es el ofertante mayor */}
           {!esAdmin && ofertaMayor && ofertaMayor.idCuenta === usuarioLogeadoId && (
-            <button onClick={handleRetirarOferta} className="boton-retirar">
+            <button id="retirar_oferta" onClick={handleRetirarOferta} className="boton-retirar">
               Retirar mi oferta
             </button>
           )}

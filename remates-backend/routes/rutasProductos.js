@@ -72,11 +72,12 @@ function obtenerMail(email, nombre_producto) {
 }
 
 function obtenerMail2(email, nombre_producto) {
-  const msg_registro = retirarOfertaMensaje(nombre_producto);
+  const msg_registro = generarMensajeRetirarOferta(nombre_producto);
+  console.log("correo enviado")
   return {
     from: "r1nc0nd3l0lv1d0@gmail.com",
-    to: email,
-    subject: "Notificación Registro de Cuenta",
+    to: "diego.moyano@usm.cl",
+    subject: "Notificacion retirar oferta",
     text: msg_registro,
   };
 }
@@ -95,9 +96,9 @@ function enviarCorreo(email, nombre_producto) {
 }
 
 // Función para enviar correo
-function enviarCorreo2(email, nombre_producto) {
-  let mail = obtenerMail(email, nombre_producto);
-
+function enviarCorreoRetirarOferta(email, nombre_producto) {
+  let mail = obtenerMail2(email, nombre_producto);
+  console.log("correo enviado");
   transporter.sendMail(mail, function (error, info) {
     if (error) {
       console.log(error);
@@ -347,6 +348,8 @@ const RetirarOferta = async (req, res) => {
       addLog(
         `El usuario con email "${email}" ha solicitado retirar su oferta por el producto: ${producto.nombre}.`
       );
+      console.log("ACA ESTOY");
+      enviarCorreoRetirarOferta("correo_usuario@ejemplo.com", nombreProducto); // Cambiar a correo del usuario
       return res.json({ success: "Correo de retiro de oferta enviado" });
     }
   } catch (error) {
@@ -356,7 +359,7 @@ const RetirarOferta = async (req, res) => {
 };
 
 router.post("/:id/oferta", authenticateToken, agregarOferta);
-router.post("/:id/retirar-oferta", RetirarOferta);
+router.post("/:id/retirar-oferta", authenticateToken, RetirarOferta);
 router
   .route("/")
   .post(upload.single("imagen"), crearProducto)

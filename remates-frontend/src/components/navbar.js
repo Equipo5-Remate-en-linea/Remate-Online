@@ -154,6 +154,7 @@ function NavbarCustom() {
                   </Nav.Link>
                 )}
                 <Nav.Link
+                  id="Cerrar_sesion"
                   className="color-letra linea-bajo-texto"
                   onClick={BorrarCookie}
                 >
