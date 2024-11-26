@@ -2,15 +2,7 @@ const { Builder, By, until } = require('selenium-webdriver');
 const jwt = require('jsonwebtoken'); // Para generar el token JWT
 
 (async function enterOffer() {
-  const chrome = require('selenium-webdriver/chrome');
-
-  const options = new chrome.Options();
-  options.headless(); 
-
-  let driver = await new Builder()
-  .forBrowser('chrome') // Indica que usas Chrome
-  .setChromeOptions(options) // Aplica las opciones de Chrome
-  .build();
+  let driver = await new Builder().forBrowser('edge').build();
 
   try {
     await driver.manage().window().maximize();
@@ -88,12 +80,13 @@ const jwt = require('jsonwebtoken'); // Para generar el token JWT
     );
 
     await retirarButton.click();
+
     await driver.sleep(2000); // Pausa para observar el resultado
   } catch (error) {
     console.error('Error:', error.message);
-    process.exit(1);
+     process.exit(1);
   } finally {
     // Cierra el navegador
-    //await driver.quit();
+    await driver.quit();
   }
 })();

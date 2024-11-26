@@ -102,6 +102,6 @@ const jwt = require('jsonwebtoken'); // Para generar el token JWT
     process.exit(1);
   } finally {
     // Cierra el navegador
-    //await driver.quit();
+    await driver.quit();
   }
 })();
