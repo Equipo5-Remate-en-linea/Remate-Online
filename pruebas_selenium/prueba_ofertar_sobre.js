@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken'); // Para generar el token JWT
 (async function enterOffer() {
   
   const options = new chrome.Options();
-  options.addArguments('--headless'); // Ejecutar en modo sin cabeza (headless)
+  options.addArguments('--headless=new');// Ejecutar en modo sin cabeza (headless)
   options.addArguments('--disable-gpu'); 
 
   let driver = await new Builder().forBrowser(Browser.CHROME).setChromeOptions(options).build();
