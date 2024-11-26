@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken'); // Para generar el token JWT
 (async function enterOffer() {
   let driver = await new Builder()
   .forBrowser('chrome')
-  .setChromeOptions(new chrome.Options().addArguments('--headless')).build();
+  .setChromeOptions(Options().addArguments('--headless')).build();
 
   try {
     await driver.manage().window().maximize();
