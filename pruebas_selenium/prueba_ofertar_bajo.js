@@ -2,11 +2,8 @@ const { Builder, By, until } = require('selenium-webdriver');
 const jwt = require('jsonwebtoken'); // Para generar el token JWT
 
 (async function enterOffer() {
-  let driver = await env
-  .builder()
-  .setChromeOptions(options.addArguments('--headless=new'))
-  .build();
-
+  let driver = await new Builder().forBrowser('chrome').setChromeOptions(options.addArguments('--headless=new')).build();
+  
   try {
     await driver.manage().window().maximize();
     await driver.get('http://localhost:3000/');
