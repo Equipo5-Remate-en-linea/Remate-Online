@@ -6,6 +6,7 @@ Este proyecto involucra el desarrollo de una plataforma de remates en línea uti
 - **NodeJS (Back-end)**: Para la lógica del servidor y manejo de solicitudes HTTP.
 - **MongoDB**: Base de datos NoSQL para el almacenamiento de información sobre productos y usuarios.
 - **Puppeteer**: Para la automatización de pruebas y generación de capturas de pantalla de la aplicación.
+- **Selenium**: Para la automatización de pruebas y generación de capturas de pantalla de la aplicación.
 
 # Descripción del trabajo realizado
 
@@ -18,6 +19,7 @@ real. El sistema está compuesto por un front-end con React, un back-end basado 
 - **NodeJS** interactúa con **MongoDB** para almacenar y recuperar información relacionada con los productos en remate y los usuarios.
 - **Puppeteer** se utiliza para ejecutar pruebas automatizadas, mas especificamente pruebas de sistemas, para verificar el correcto funcionamiento de la aplicación. Se almaceno resultado en un txt
 - **Jenkins** se utiliza para supervisar el proceso de integración continua de la aplicación. Esta ligado a slack para notificar el estado y a jira para ligar tareas.
+- **Selenium** se utiliza para ejecutar pruebas automatizadas, mas especificamente pruebas de sistemas, para verificar el correcto funcionamiento de la aplicación.
 
 ## Procedimiento de ejecución de pruebas
 
@@ -163,6 +165,78 @@ Comentarios adiconales: Mayor retroalimentación en prueba.
 
 Para utilizar jenkins se debe acceder a la maquina virtual y ejecutar el comando "java -jar jenkins.war --enable-future-java". Al hacerlo se puede acceder al panel de control de jenkins, con la siguiente url: http://168.61.72.242:8080/ y aqui esta condigurado un pipeline con el git del proyecto 'Remate en linea' donde se puede probar, ademas esta configurado, para ejecutarse cada vez que se suba cambios a la rama 'Code-Base'.
 
+#Selenium 
+
+Se crearon disintas pruebas en selenium y se integro con jenkinsm de forma que cada vez que se haga un push estas se ejecuten. A continuacion se detallan las pruebas.
+
+## Procedimiento de ejecución de pruebas
+
+1. Ejecutar el servidor de NodeJS.
+2. Iniciar la aplicación React en el navegador.
+3. Ejecutar los scripts de pruebas con Selenium para validar la interacción de usuario y la correcta visualización de los datos.
+
+#Pruebas y resultados
+
+- prueba_iniciar_sesion_correcto
+
+Entrada: 
+Email - String: diego.moyano@usm.cl
+Contrasena - String: 123456
+
+Resultado esperado: -
+Resultado obtenido: -
+Fallo o Éxito: Exito
+Comentarios adiconales: Mayor retroalimentación en prueba.
+
+- prueba_iniciar_sesion_incorrecto
+
+Entrada: 
+Email - String: diego.moyano@usm.cl
+Contrasena - String: 12346
+
+Resultado esperado: -
+Resultado obtenido: -
+Fallo o Éxito: Exito
+Comentarios adiconales: Mayor retroalimentación en prueba.
+
+- prueba_ofertar_bajo
+
+Entrada: 
+Email - String: diego.moyano@usm.cl
+Contrasena - String: 123456
+producto - String: producto_0
+oferta - int: oferta_actual - 1000
+
+Resultado esperado: -
+Resultado obtenido: -
+Fallo o Éxito: Exito
+Comentarios adiconales: Mayor retroalimentación en prueba.
+
+- prueba_ofertar_sobre
+
+Entrada: 
+Email - String: diego.moyano@usm.cl
+Contrasena - String: 123456
+producto - String: producto_0
+oferta - int: oferta_actual + 1000
+
+Resultado esperado: -
+Resultado obtenido: -
+Fallo o Éxito: Exito
+Comentarios adiconales: Mayor retroalimentación en prueba.
+
+- prueba_retirar_oferta
+
+Entrada: 
+Email - String: diego.moyano@usm.cl
+Contrasena - String: 123456
+producto - String: producto_0
+
+Resultado esperado: -
+Resultado obtenido: -
+Fallo o Éxito: Exito
+Comentarios adiconales: Mayor retroalimentación en prueba.
+
 # Problemas encontrados y soluciones
 
-No se encontraron problemas.
+- Integracion con selenium consumia mucho por lo que dificultaba el rendimiento de la maquina, se resolvio utilizando la opcion que elimina la interfaz grafica.
