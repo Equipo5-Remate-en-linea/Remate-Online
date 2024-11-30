@@ -237,6 +237,34 @@ Resultado obtenido: -
 Fallo o Éxito: Exito
 Comentarios adiconales: Mayor retroalimentación en prueba.
 
+- rematar_producto
+
+Entrada: 
+Email - String: diego.morella20@gmail.com
+Contrasena - String: 123456
+producto - String: Funko_pop_Tanjiro_Kamado_detalles
+
+Resultado esperado: Producto rematado exitosamente.
+Resultado obtenido: Producto rematado exitosamente.
+Fallo o Éxito: Exito
+Comentarios adiconales: Mayor retroalimentación en prueba.
+
+- agregar_producto
+
+Entrada: 
+Email - String: diego.morella20@gmail.com
+Contrasena - String: 123456
+nombre producto - String: Prueba Selenium
+descripción producto - String: Este es un producto nuevo automatizado por Selenium
+precio inicial -  int: 10000
+duracion remate - int: 10
+categoria - String: Tecnologia
+
+Resultado esperado: Producto agregado exitosamente.
+Resultado obtenido: Producto agregado exitosamente.
+Fallo o Éxito: Exito
+Comentarios adiconales: Mayor retroalimentación en prueba.
+
 # Problemas encontrados y soluciones
 
 - Integracion con selenium consumia mucho por lo que dificultaba el rendimiento de la maquina, se resolvio utilizando la opcion que elimina la interfaz grafica.
