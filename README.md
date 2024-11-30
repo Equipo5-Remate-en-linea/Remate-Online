@@ -7,6 +7,9 @@ Aplicación web de remates en línea.
 
 Enlace para el video de la Entrega 2: [Link](https://youtu.be/7M_-3mWZi80)
 
+Enlace para el video de la Entrega 3: [Link](https://youtu.be/vaW9plrKKBs)
+
+
 ## Pre-requisitos
 
 Para instalar y ejecutar la aplicación se deben tener instalado [npm](https://www.npmjs.com/) y [node](https://nodejs.org/en/).
